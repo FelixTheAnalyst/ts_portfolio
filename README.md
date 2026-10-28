@@ -4,6 +4,7 @@
 **Student Number:** FLXETH002  
 **Module:** STA Honours Time Series Analysis (2026)  
 **Deadline:** 30 October 2026 11:59pm 
+
 **Institution:** University of Cape Town, Department of Statistical Sciences
 
 ---
@@ -20,25 +21,28 @@ This portfolio showcases four substantial projects in time series analysis, demo
 
 ## Portfolio Structure
 
+```
 portfolio/
-├── README.md (this file)
-├── index.qmd (landing page)
+├── README.md
+├── index.qmd
 ├── ai-use-log.qmd
 ├── reflective-commentary.qmd
 ├── journal/
-│ ├── index.qmd
-│ └── entries/ (chronological entries)
+│   ├── index.qmd
+│   └── entries/
 ├── projects/
-│ ├── index.qmd
-│ ├── project_01/ (substantial project)
-│ ├── project_02/ (substantial project)
-│ ├── project_03/ (substantial project)
-│ └── project_04/ (substantial project)
-├── smaller_pieces/
-│ └── section-1.qmd (smaller pieces, model fitting, reflections)
-├── ..
+│   ├── index.qmd
+│   ├── project-01/
+│   ├── project-02/
+│   ├── project-03/
+│   └── project-04/
+├── section-1/
+│   └── section-1.qmd
+├── section-2/
+│   └── section-2.qmd
 └── appendix/
-└── data_and_reconciliation.qmd
+    └── code-and-data.qmd
+```
 
 
 ---
@@ -188,4 +192,4 @@ The rendered output will be in `_output/`.
 ---
 
 **Last updated:** 28 October 2026  
-**Repository:** [GitHub link]
+**Repository:** [ts_portfolio](https://github.com/FelixTheAnalyst/ts_portfolio)
