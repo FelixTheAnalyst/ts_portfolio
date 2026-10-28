@@ -6,8 +6,8 @@
       <strong>Student:</strong> Ethon Felix<br>
       <strong>Student Number:</strong> FLXETH002<br>
       <strong>Module:</strong> STA Honours Time Series Analysis (2026)<br>
-      <strong>Deadline:</strong> 30 October 2026 11:59pm<br><br>
-      <strong>Institution:</strong> University of Cape Town, Department of Statistical Sciences
+      <strong>Deadline:</strong> 30 October 2026 11:59pm<br>
+      <strong>Institution:</strong> <br>University of Cape Town<br>Department of Statistical Sciences
     </td>
     <td align="right">
       <img src="./uct-logo.png" alt="UCT Logo" width="150">
