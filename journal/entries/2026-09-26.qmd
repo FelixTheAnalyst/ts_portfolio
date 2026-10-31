@@ -1,0 +1,31 @@
+---
+title: "Sat 26 Sept 2026"
+date: 2026-09-26
+categories: ["Regression with ARMA errors"]
+---
+
+::: {.callout-warning}
+## Draft - edit to match what actually happened
+Remove this banner once the entry is accurate.
+:::
+
+**Session / topic:** Project 2 write-up
+
+## What I did
+Wrote the results, reporting the peak coherence and that it did not reject the family-wise null.
+
+## What I learned
+A null result is reportable if the limits of the data are stated clearly.
+
+## Difficulties and open questions
+Keeping the discussion honest about low power.
+
+## What I will do next
+Plan Section 1.
+
+## AI assistance
+*[State what AI help you used that day, or write "None". Match your AI Use Log.]*
+
+## Links
+- [P2](../../projects/project-02/index.qmd)
+

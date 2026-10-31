@@ -1,0 +1,177 @@
+---
+title: "Projects"
+subtitle: "Four studies of one question: what can be claimed from the South African data we actually have?"
+title-block-banner: "#000000"
+title-block-banner-color: "#ffffff"
+---
+
+<!-- Page-only override: swap the UCT logo (set globally in styles.css) for the project sketch -->
+```{=html}
+<style>
+#title-block-header::after {
+  background-image: url("../images/projects-banner.svg");  /* path is relative to projects/index.html */
+  filter: none;                                            /* keep the blue accent, no white-out */
+  width: 260px; height: 175px;
+}
+</style>
+```
+
+The projects follow one line of enquiry: **risk clustering**, then **external dependency**, then **behavioural response**, then **structural change**. Each card below opens a one-page summary, which links to the full analysis.
+
+<!-- PASTE THE ENTIRE ```{=html} <div class="flow"> ... </div> ``` BLOCK FROM THE PREVIOUS MESSAGE HERE -->
+
+---
+
+## Coverage of the portfolio requirements
+
+The portfolio brief asks that, across the four projects, at least one involves model comparison, at least one involves computational or statistical programming, and at least one uses real-world data. The table shows where each requirement is met, and the bottom row counts the projects that meet it.
+
+| Project | Type | Model comparison | Programming | Real-world data |
+|:--|:--|:--|:--|:--|
+| [1: GARCH-X](./project-01/index.html) | Exploration and simulation study | ✓ GARCH, GJR, EGARCH, in and out of sample | ✓ Monte Carlo power study, hand-coded likelihood | ✓ ZAR/USD, Google Trends |
+| [2: Spectral Coherence](project-02/index.html) | Exploration and simulation check | – | ✓ Coherence threshold and simulation check | ✓ Eskom EAF, JSE |
+| [3: Two-Pot Withdrawals](project-03/index.html) | Implementation | ✓ Poisson vs NB, step vs spline | ✓ IRLS from first principles | ✓ Withdrawal counts |
+| [4: State-Space Kalman](project-04/index.html) | Implementation | ✓ Local linear trend vs two restricted models | ✓ Filter, smoother and MLE from first principles | ✓ Banking disruption series |
+| **Projects meeting it** | | **3 of 4** | **4 of 4** | **4 of 4** |
+
+<!-- Edit each cell to match what you actually built. Keep the claim in the cell checkable on the project page. -->
+
+---
+
+The four projects follow one line of enquiry through South African financial and economic data: **risk clustering**, then **external dependency**, then **behavioural response**, then **structural change**. Each card opens a one-page summary, which links to the full analysis.
+
+```{=html}
+<div class="flow">
+
+  <!-- ===== Project 1 ===== -->
+  <a class="flow-card" href="project-01/index.html">
+    <div class="flow-head">
+      <span class="flow-step">Project 1</span>
+      <span class="flow-title">GARCH-X: Does public attention predict rand volatility?</span>
+    </div>
+    <div class="flow-main">
+      <div class="flow-body">
+        <p>A Student-t GARCH(1,1) with a lagged Google Trends term in the variance equation, compared with GARCH, GJR and EGARCH benchmarks. Evaluated in sample (boundary-corrected likelihood ratio) and out of sample (QLIKE against realised variance), with a power study.</p>
+        <div class="flow-tags"><span>ARCH/GARCH</span><span>Model comparison</span><span>Real-world data</span></div>
+        <div class="flow-open">Open summary →</div>
+      </div>
+      <div class="flow-fig">
+        <!-- Volatility clustering with conditional-variance envelope (swap for a real figure later) -->
+        <svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Volatility clustering with conditional variance bands" xmlns="http://www.w3.org/2000/svg">
+          <line x1="10" y1="90" x2="310" y2="90" stroke="#c9d3e6" stroke-width="1"/>
+          <path d="M10,82 C60,82 80,40 110,38 C140,40 160,82 200,82 C225,82 235,44 255,42 C280,44 295,82 310,82" fill="none" stroke="#1a5fd0" stroke-width="2" stroke-dasharray="5 4"/>
+          <path d="M10,98 C60,98 80,140 110,142 C140,140 160,98 200,98 C225,98 235,136 255,138 C280,136 295,98 310,98" fill="none" stroke="#1a5fd0" stroke-width="2" stroke-dasharray="5 4"/>
+          <polyline fill="none" stroke="#000" stroke-width="1.4" stroke-linejoin="round"
+            points="10,90 20,86 30,93 40,88 50,91 60,84 70,96 80,70 90,112 100,58 110,124 120,66 130,114 140,80 150,98 160,88 170,92 180,86 190,94 200,90 210,87 220,93 230,76 240,108 250,62 260,120 270,78 280,100 290,89 300,92 310,90"/>
+        </svg>
+      </div>
+    </div>
+  </a>
+
+  <div class="flow-arrow"><span>From risk to its external drivers</span></div>
+
+  <!-- ===== Project 2 ===== -->
+  <a class="flow-card" href="project-02/index.html">
+    <div class="flow-head">
+      <span class="flow-step">Project 2</span>
+      <span class="flow-title">Spectral Coherence: Does grid stability explain JSE recovery?</span>
+    </div>
+    <div class="flow-main">
+      <div class="flow-body">
+        <p>Smoothed periodograms and squared coherence between Eskom's Energy Availability Factor and JSE returns, with an F-based null threshold, a phase-lead estimate and a simulation check of the method.</p>
+        <div class="flow-tags"><span>Frequency domain</span><span>Spectral filtering</span><span>Real-world data</span></div>
+        <div class="flow-open">Open summary →</div>
+      </div>
+      <div class="flow-fig">
+        <!-- Two spectra sharing a common peak (coherence) -->
+        <svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Two spectra sharing a common peak" xmlns="http://www.w3.org/2000/svg">
+          <line x1="10" y1="160" x2="310" y2="160" stroke="#c9d3e6" stroke-width="1"/>
+          <line x1="100" y1="20" x2="100" y2="160" stroke="#1a5fd0" stroke-width="1.2" stroke-dasharray="4 4"/>
+          <path d="M10,150 C50,148 70,60 100,50 C130,60 150,130 190,138 C230,142 270,120 310,128" fill="none" stroke="#000" stroke-width="2"/>
+          <path d="M10,152 C60,150 75,80 100,72 C130,80 155,135 200,140 C240,144 280,132 310,138" fill="none" stroke="#1a5fd0" stroke-width="2"/>
+        </svg>
+      </div>
+    </div>
+  </a>
+
+  <div class="flow-arrow"><span>From market links to household behaviour</span></div>
+
+  <!-- ===== Project 3 ===== -->
+  <a class="flow-card" href="project-03/index.html">
+    <div class="flow-head">
+      <span class="flow-step">Project 3</span>
+      <span class="flow-title">Two-Pot Withdrawals: How does new policy reshape behaviour?</span>
+    </div>
+    <div class="flow-main">
+      <div class="flow-body">
+        <p>Poisson and negative binomial time series regression with a log-exposure offset, harmonic seasonality and a policy step and slope. The IRLS fitter is written from first principles and validated against R's built-in GLMs, and the counterfactual carries prediction intervals.</p>
+        <div class="flow-tags"><span>Time series regression</span><span>Count data</span><span>GLM</span><span>Real-world data</span></div>
+        <div class="flow-open">Open summary →</div>
+      </div>
+      <div class="flow-fig">
+        <!-- Withdrawal counts before and after the policy date -->
+        <svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Withdrawal counts jumping after a policy date" xmlns="http://www.w3.org/2000/svg">
+          <line x1="10" y1="160" x2="310" y2="160" stroke="#c9d3e6" stroke-width="1"/>
+          <g fill="#b8c4d9">
+            <rect x="14" y="140" width="16" height="20"/><rect x="35" y="136" width="16" height="24"/>
+            <rect x="56" y="138" width="16" height="22"/><rect x="77" y="134" width="16" height="26"/>
+            <rect x="98" y="137" width="16" height="23"/><rect x="119" y="135" width="16" height="25"/>
+          </g>
+          <g fill="#1a5fd0">
+            <rect x="140" y="90" width="16" height="70"/><rect x="161" y="48" width="16" height="112"/>
+            <rect x="182" y="62" width="16" height="98"/><rect x="203" y="74" width="16" height="86"/>
+            <rect x="224" y="84" width="16" height="76"/><rect x="245" y="92" width="16" height="68"/>
+            <rect x="266" y="98" width="16" height="62"/><rect x="287" y="102" width="16" height="58"/>
+          </g>
+          <line x1="137" y1="20" x2="137" y2="160" stroke="#000" stroke-width="1.2" stroke-dasharray="4 4"/>
+        </svg>
+      </div>
+    </div>
+  </a>
+
+  <div class="flow-arrow"><span>From a policy shock to structural change</span></div>
+
+  <!-- ===== Project 4 ===== -->
+  <a class="flow-card" href="project-04/index.html">
+    <div class="flow-head">
+      <span class="flow-step">Project 4</span>
+      <span class="flow-title">State-Space Kalman: Is banking disruption still accelerating?</span>
+    </div>
+    <div class="flow-main">
+      <div class="flow-body">
+        <p>A local linear trend model with the Kalman filter, smoother and maximum likelihood written from first principles and checked against <code>StructTS</code>. The smoothed slope and its forecast interval answer whether growth has plateaued.</p>
+        <div class="flow-tags"><span>State-space</span><span>Kalman filter</span><span>Model comparison</span><span>Real-world data</span></div>
+        <div class="flow-open">Open summary →</div>
+      </div>
+      <div class="flow-fig">
+        <!-- Kalman-filtered level with confidence band over noisy data -->
+        <svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Kalman filtered trend with confidence band" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10,114 C60,110 90,94 130,78 C170,62 210,52 250,38 C275,30 295,26 310,22 L310,78 C295,80 275,84 250,82 C210,92 170,102 130,114 C90,128 60,142 10,146 Z" fill="#1a5fd0" fill-opacity="0.15"/>
+          <path d="M10,130 C60,126 90,110 130,96 C170,82 210,72 250,60 C275,54 295,52 310,50" fill="none" stroke="#1a5fd0" stroke-width="2.4"/>
+          <g fill="#000">
+            <circle cx="30" cy="132" r="3"/><circle cx="55" cy="118" r="3"/><circle cx="80" cy="124" r="3"/>
+            <circle cx="105" cy="98" r="3"/><circle cx="130" cy="104" r="3"/><circle cx="155" cy="78" r="3"/>
+            <circle cx="180" cy="92" r="3"/><circle cx="205" cy="66" r="3"/><circle cx="230" cy="72" r="3"/>
+            <circle cx="255" cy="50" r="3"/><circle cx="280" cy="62" r="3"/><circle cx="300" cy="44" r="3"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </a>
+
+</div>
+```
+
+Start with Project 1 and read down. The method work in [Section 1](../section_1/section_1.qmd) and [Section 2](../section_2/section_2.qmd) supports these projects, and every dataset and script is listed in [Code & Data](../appendix/code_and_data.qmd).
+
+---
+
+## How to read this page
+
+Start at the top card and read down, since each project builds on the question left open by the one before. For each project, read the **summary** first. It takes a few minutes and states the question, the key findings and what I would do differently. Follow its link to the **detailed analysis** for the full method, diagnostics and limitations. Code is folded by default, so use the "Show code" toggle to open any chunk, and the hand-coded methods in Projects 3 and 4 are left open.
+
+---
+
+# Smaller pieces of work..
+
+The shorter exercises that support these projects are in [Section 1](../section_1/section_1.html) and [Section 2](../section_2/section_2.html). Datasets, scripts and cleaning decisions are in [Code & Data](../appendix/code_and_data.html), and where AI assisted is recorded in the [AI Use Log](../appendix/ai_use_log.html).

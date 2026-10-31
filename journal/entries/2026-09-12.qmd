@@ -1,0 +1,26 @@
+---
+title: "Sat 12 Sept 2026"
+date: 2026-09-12
+categories: ["Exponential smoothing"]
+---
+
+**Session / topic:** Forecast evaluation
+
+## What I did
+Implemented rolling-origin forecast evaluation across the candidate models.
+
+## What I learned
+One holdout window is noisy, and several forecast origins give a fairer comparison.
+
+## Difficulties and open questions
+Refitting at every origin was slow.
+
+## What I will do next
+Draft the Project 1 method section.
+
+## AI assistance
+None.
+
+## Links
+- [Project 1](../../projects/project-01/index.html)
+

@@ -1,0 +1,26 @@
+---
+title: "Wed 09 Sept 2026"
+date: 2026-09-09
+categories: ["Part 1 consolidation"]
+---
+
+**Session / topic:** MA, AR and ARMA identification
+
+## What I did
+Worked through ACF/PACF identification and applied it to the Project 1 series.
+
+## What I learned
+Cut-off versus tail-off patterns narrow the candidates, but real data is more ambiguous than the textbook cases.
+
+## Difficulties and open questions
+My ACF/PACF plots did not match any clean pattern.
+
+## What I will do next
+Fit several candidates and compare information criteria.
+
+## AI assistance
+Used Claude to clarify [ACF/PACF]; the work and write-up are my own.
+
+## Links
+- [Project 1](../../projects/project-01/index.html)
+

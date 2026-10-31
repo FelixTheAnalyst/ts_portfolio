@@ -1,0 +1,17 @@
+---
+title: "AI use log"
+---
+
+I used Claude (Anthropic) in three limited ways during this portfolio: to help debug errors, as a learning tool for clarifying concepts, and to discuss project design and ideas. The analysis, code, interpretation and writing are my own.
+
+## Log
+
+| Period | Use | What AI helped with | What I did with it | How I verified |
+|---|---|---|---|---|
+| Sep–Oct 2026 | Debugging | Explaining error messages and suspect output (e.g. the `spec.pgram` demeaning mismatch, unstable Whittle estimates, IRLS convergence, smoother recursions, the `depmixS4` log-likelihood error, render and link errors) | Located the cause myself, fixed my own code, re-ran | Compared with `spec.pgram`, simulation recovery, an independent implementation |
+| Sep–Oct 2026 | Concept clarity | Clarifying ideas from the notes (e.g. ACF/PACF, coherence thresholds, state-space notation, the Kalman filter, boundary likelihood-ratio tests, HMM recursions) | Used explanations to understand, then worked through the material myself | Checked against the course notes and my own results |
+| Sep–Oct 2026 | Project design and ideas | Discussing how to frame Projects 2 to 4 and the Section 1 and 2 extensions | Chose, adapted or rejected suggestions; wrote all code and text myself | Checked each design choice against what the data could support |
+
+## Reflection on use
+
+AI helped most by explaining errors and unfamiliar notation faster than I could find it myself. It could not decide what my data could support, so I made those judgements from my own results. I trusted a suggestion only once I had reproduced it in code or checked it against the notes.

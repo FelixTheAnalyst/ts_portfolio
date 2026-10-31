@@ -1,0 +1,26 @@
+---
+title: "Sun 04 Oct 2026"
+date: 2026-10-04
+categories: ["State-space models"]
+---
+
+**Session / topic:** Weekly reflection
+
+## What I did
+Finished and reread Section 1.
+
+## What I learned
+Spectral and likelihood ideas from Project 2 carried straight into Section 1.
+
+## Difficulties and open questions
+Keeping the section short and focused.
+
+## What I will do next
+Read the Kalman filter notes.
+
+## AI assistance
+None.
+
+## Links
+- [Section 1](../../section-1/section_1.html)
+

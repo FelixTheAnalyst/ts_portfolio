@@ -1,0 +1,41 @@
+---
+title: "Reflective commentary"
+---
+
+At the start of this module, I approached time series modelling predominantly as a mechanical fitting exercise: selecting a model family, estimating parameters, comparing information criteria, and declaring a winner. However, the trajectory of the four projects fundamentally reshaped this perspective. By the conclusion of the coursework, my core inquiry had shifted from asking whether a model fit to questioning whether the underlying data could support any model at all, and critically, what inferences I would be entitled to draw if it could not. This reflective commentary traces that evolution through four pivotal moments where my initial expectations proved mistaken.
+
+\vspace{0.2cm}
+
+Project 2 investigated whether Eskom's energy availability and the JSE All Share index share cyclical dynamics. The squared coherence function registered a prominent peak of 0.67 at a period of seven weeks, which immediately presented itself as the natural headline finding. Yet, this interpretation overlooked fundamental statistical properties: (1) coherence is estimated via a smoothed periodogram characterized by few effective degrees of freedom, and (2) my analytical process involved searching across a broad spectrum of frequencies to isolate the maximum value. A standard single-frequency critical value fails to account for this multiple-testing search space. 
+
+\vspace{0.2cm}
+
+To rigorously address this, I simulated the null distribution of the maximum statistic. The observed peak yielded a family-wise $p$-value of 0.127, precluding any rejection of the null. Although one of six robustness alternatives did reject, I transparently reported that result alongside its context. Furthermore, because the dataset spanned only approximately 231 weeks, the inherent sample size strictly constrained statistical power; consequently, I framed the conclusion as suggestive and underpowered rather than as definitive evidence of an absence of relationship. 
+
+\vspace{0.2cm}
+
+This marked the module's turning point where methodological precision regarding uncertainty superseded the desire for a clean, affirmative answer. This project also underscored the vital importance of rigorous code auditing. My custom coherence routine diverged from spec.pgram by roughly $1.6 \times 10^{-2}$ until I successfully aligned the internal demeaning procedures. While the discrepancy was minor, it would have remained entirely undetected without direct comparative verification.
+
+\vspace{0.2cm}
+
+In Section 1, I implemented the Whittle likelihood for an ARMA(1,1) process and evaluated parameter recovery using simulated data. Initial specifications with $\phi = 0.6$ and $\theta = -0.4$ produced highly unstable estimates. The underlying cause was structural: when the autoregressive and moving average roots lie in close proximity, the two terms nearly cancel out, rendering the likelihood surface exceptionally flat in that direction. The estimator was functioning precisely as designed; rather, the flaw lay in my simulation parameterisation. By adjusting the true parameters to $\phi = 0.7$ and $\theta = 0.5$, where the roots are cleanly separated, parameter recovery behaved sensibly. This investigation demonstrated that a simulation study merely illustrates where a method functions, and the specific parameter values selected actively dictate what insights are acquired. Consequently, I now treat parameter selection as an integral component of the analytical design, explicitly detailing its rationale in the write-up.
+
+\vspace{0.2cm}
+
+Project 3 was originally intended to examine pension withdrawals under South Africa's Two-Pot retirement system, yet no public time series of actual withdrawal counts existed. Rather than forcing an artificial proxy, I constructed a bespoke simulation calibrated directly against published SARS figures while analyzing Google Trends data separately via a quasi-Poisson framework, ensuring both components remained meticulously distinguished and labelled. The simulation provided a reliable sandbox to verify that my hand-coded Iteratively Reweighted Least Squares (IRLS) algorithm for the negative-binomial model successfully recovered known parameters. Simultaneously, the Google Trends data illustrated the empirical nature of a real yet indirect behavioural signal. Formulating the methodological justification for this dual-pronged design reinforced a broader lesson: stating data limitations plainly and honestly equips the reader with a sound basis to trust every other facet of the analysis.
+
+\vspace{0.2cm}
+
+Project 4 utilized a state-space regression model featuring time-varying coefficients. To formally test whether the coefficients genuinely varied over time, I compared it against a constant-coefficient specification using a likelihood-ratio test. Because the null hypothesis restricts a variance parameter to zero, sitting squarely on the boundary of the parameter space, the conventional $\chi^2$ asymptotic reference distribution is invalid. The correct theoretical reference is instead an equal mixture of $\chi^2_0$ and $\chi^2_1$ distributions. Additionally, I discovered that the likelihood value of the diffuse-drift model was incomparable with the other specifications; consequently, I restricted formal likelihood comparisons strictly to the nested pair and evaluated the broader model set via out-of-sample forecasts validated through a Diebold-Mariano test. Notably, neither Kalman filter model outperformed an expanding-window OLS benchmark out of sample (yielding a best Mean Squared Error ratio of 1.000, which collapses identically to OLS), confirming that the added model flexibility yielded zero forecasting gains. Both lessons stem from a single essential habit: rigorously verifying that two numerical metrics actually measure the exact identical quantity before attempting a comparison.
+
+\vspace{0.2cm}
+
+Reflecting on the workflow, I would prioritize establishing the evaluation framework prior to constructing the model architecture. Across several projects, I wrote the estimation code first and devised the validation strategy afterward. For instance, the true ARMA(1,1) parameters for the Whittle study were only locked down after the initial recovery run failed, necessitating a complete re-run of the entire simulation pipeline. Furthermore, I would maintain contemporaneous logs detailing the rationale behind each analytical decision, as compiling the retrospective journal vividly exposed how easily nuanced decisions are forgotten when reconstructed later. In Section 2, the hidden Markov model inherently implies geometric state durations. My empirical duration check revealed observed run lengths closely mirroring geometric expectations, for example, 7.2 weeks against a theoretical 7.3 weeks for regime 3, with only regime 1 showing a noticeable divergence (10.7 against 14.0 weeks). While the data offered no definitive evidence to reject the Markov assumption, the total sample of 21 observed runs remains too sparse to be conclusive. Moving forward, I am keen to explore semi-Markov formulations, which allow the duration distribution to be modelled explicitly.
+
+\vspace{0.2cm}
+
+Ultimately, the module did not alter my conviction that rigorous modelling matters; rather, it redefined what I consider rigorous. A model that achieves a strong statistical fit merely marks the commencement of the analytical work. The true substance lies in rigorously determining what the data can and cannot substantiate, and articulating those boundaries clearly so that independent scrutiny is genuinely possible.
+
+\vspace{0.5cm}
+
+**Word Count:** 1027

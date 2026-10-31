@@ -1,0 +1,26 @@
+---
+title: "Sat 10 Oct 2026"
+date: 2026-10-10
+categories: ["Kalman filter"]
+---
+
+**Session / topic:** Project 3 write-up
+
+## What I did
+Wrote Project 3 and built the comparison, estimates and evidence tables.
+
+## What I learned
+Stating what each data source can and cannot show keeps the claims honest.
+
+## Difficulties and open questions
+Keeping the simulation and real-data parts clearly separate.
+
+## What I will do next
+Pull the Project 4 data.
+
+## AI assistance
+None.
+
+## Links
+- [Project 3](../../projects/project-03/index.html)
+

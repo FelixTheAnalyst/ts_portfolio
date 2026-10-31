@@ -1,0 +1,26 @@
+---
+title: "Wed 16 Sept 2026"
+date: 2026-09-16
+categories: ["Exponential smoothing"]
+---
+
+**Session / topic:** Project 1 results
+
+## What I did
+Finalised the Project 1 comparison tables and figures.
+
+## What I learned
+A forecast is only useful with its uncertainty shown.
+
+## Difficulties and open questions
+My tables were too crowded to read easily.
+
+## What I will do next
+Start scoping Project 2.
+
+## AI assistance
+None.
+
+## Links
+- [Project 1](../../projects/project-01/index.html)
+

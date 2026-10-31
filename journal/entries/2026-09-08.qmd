@@ -1,0 +1,27 @@
+---
+title: "Tue 08 Sept 2026"
+date: 2026-09-08
+categories: ["Part 1 consolidation"]
+---
+
+**Session / topic:** Exploring a series
+
+## What I did
+Pulled and cleaned the Project 1 data, plotted it and checked for gaps, level shifts and outliers.
+
+## What I learned
+Plotting first matters: breaks and outliers shape model choice more than any single test.
+
+## Difficulties and open questions
+Deciding whether to adjust outliers or model around them.
+
+## What I will do next
+Look at ACF and PACF and form candidate orders.
+
+## AI assistance
+
+None.
+
+## Links
+- [Project 1](../../projects/project-01/index.html)
+

@@ -1,0 +1,26 @@
+---
+title: "Wed 30 Sept 2026"
+date: 2026-09-30
+categories: ["State-space models"]
+---
+
+**Session / topic:** GPH long memory
+
+## What I did
+Coded the GPH estimator and applied it to the EAF series.
+
+## What I learned
+The estimate of the memory parameter depends on the bandwidth chosen.
+
+## Difficulties and open questions
+Deciding which bandwidth to report.
+
+## What I will do next
+Write up Section 1.
+
+## AI assistance
+Used Claude to clarify [GPH bandwidth]; the work and write-up are my own.
+
+## Links
+- [Section 1](../../section_1/section_1.html)
+

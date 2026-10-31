@@ -1,0 +1,26 @@
+---
+title: "Fri 02 Oct 2026"
+date: 2026-10-02
+categories: ["State-space models"]
+---
+
+**Session / topic:** Project 3 design
+
+## What I did
+Designed a negative-binomial GLM with an offset for the withdrawal counts.
+
+## What I learned
+Counts with overdispersion call for the negative binomial rather than the Poisson.
+
+## Difficulties and open questions
+Choosing the decay structure.
+
+## What I will do next
+Hand-code the fitting routine.
+
+## AI assistance
+Discussed the design with Claude (Project 3 hybrid design); decisions and code are mine.
+
+## Links
+- [Project 3](../../projects/project-03/index.html)
+

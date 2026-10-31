@@ -1,0 +1,26 @@
+---
+title: "Thu 15 Oct 2026"
+date: 2026-10-15
+categories: ["Hidden Markov models (1)"]
+---
+
+**Session / topic:** Likelihood and boundary test
+
+## What I did
+Added a concentrated likelihood and a likelihood-ratio test for time-varying coefficients.
+
+## What I learned
+A variance tested against zero lies on the boundary, so the null is a half-and-half chi-square mixture.
+
+## Difficulties and open questions
+Remembering that the standard chi-square is wrong here.
+
+## What I will do next
+Add forecast comparison.
+
+## AI assistance
+Used Claude to clarify [boundary chi-squared]; the work and write-up are my own.
+
+## Links
+- [Project 4](../../projects/project-04/index.html)
+

@@ -1,0 +1,26 @@
+---
+title: "Tue 15 Sept 2026"
+date: 2026-09-15
+categories: ["Exponential smoothing"]
+---
+
+**Session / topic:** ETS versus ARIMA
+
+## What I did
+Fitted ETS alongside the ARIMA models and compared their forecasts.
+
+## What I learned
+ETS and ARIMA overlap and neither dominates, so out-of-sample accuracy is the fair comparison.
+
+## Difficulties and open questions
+AIC is not comparable across the two families, so I could not rank them with it.
+
+## What I will do next
+Finalise the comparison tables.
+
+## AI assistance
+Used Claude to clarify [AIC across families]; the work and write-up are my own.
+
+## Links
+- [Project 1](../../projects/project-01/index/hhtml)
+

@@ -1,0 +1,27 @@
+---
+title: "Sat 19 Sept 2026"
+date: 2026-09-19
+categories: ["Exponential smoothing"]
+---
+
+**Session / topic:** Aligning the series
+
+## What I did
+Pulled the All Share data, aligned it to the weekly EAF series and counted the observations.
+
+## What I learned
+Alignment and missing quotes need explicit, documented rules.
+
+## Difficulties and open questions
+Some All Share quotes were missing.
+
+## What I will do next
+Compute the periodograms.
+
+## AI assistance
+None.
+
+## Links
+- [Project 2](../../projects/project-02/index.html)
+- [Appendix](../../appendix/code_and_data.html)
+

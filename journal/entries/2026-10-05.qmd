@@ -1,0 +1,26 @@
+---
+title: "Mon 05 Oct 2026"
+date: 2026-10-05
+categories: ["Kalman filter"]
+---
+
+**Session / topic:** The Kalman filter
+
+## What I did
+Read the notes on the Kalman filter, smoother and the prediction-error likelihood.
+
+## What I learned
+The likelihood falls out of the filter recursions as a sum of prediction-error terms.
+
+## Difficulties and open questions
+The matrix notation is dense.
+
+## What I will do next
+Return to Project 3 and code IRLS.
+
+## AI assistance
+Used Claude to clarify [Kalman notation]; the work and write-up are my own.
+
+## Links
+- [Project 4](../../projects/project-04/index.html)
+

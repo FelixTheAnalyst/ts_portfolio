@@ -1,0 +1,26 @@
+---
+title: "Sat 24 Oct 2026"
+date: 2026-10-24
+categories: ["Hidden Markov models (2) and assembly"]
+---
+
+**Session / topic:** Reflective commentary
+
+## What I did
+Drafted the reflective commentary in my own words.
+
+## What I learned
+My approach moved from fitting models to testing whether each model was needed.
+
+## Difficulties and open questions
+Staying within the word limit.
+
+## What I will do next
+Complete the AI use log.
+
+## AI assistance
+None.
+
+## Links
+- [AI Usage](../../appendix/ai_use_log.html)
+

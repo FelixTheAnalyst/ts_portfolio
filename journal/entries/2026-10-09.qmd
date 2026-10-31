@@ -1,0 +1,26 @@
+---
+title: "Fri 09 Oct 2026"
+date: 2026-10-09
+categories: ["Kalman filter"]
+---
+
+**Session / topic:** Google Trends
+
+## What I did
+Fitted a quasi-Poisson model to the Google Trends series and compared it with the simulation results.
+
+## What I learned
+A scaled search index is not a count, so quasi-Poisson is the safer choice.
+
+## Difficulties and open questions
+Interpreting the index scale.
+
+## What I will do next
+Write up Project 3.
+
+## AI assistance
+None.
+
+## Links
+- [Project 3](../../projects/project-03/index.html)
+

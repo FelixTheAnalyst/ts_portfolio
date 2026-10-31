@@ -1,0 +1,30 @@
+---
+title: "Mon 07 Sept 2026"
+date: 2026-09-07
+categories: ["Part 1 consolidation"]
+---
+
+**Session / topic:** Part 1: stationarity and operators
+
+## What I did
+
+Re-read the Part 1 notes on stationarity, differencing and the backshift operator, and listed what each project would need from them.
+
+## What I learned
+
+Backshift notation gives one language for trend, seasonality and ARIMA structure, which makes later models easier to compare.
+
+## Difficulties and open questions
+
+I cannot yet tell which of my series are stationary without testing them.
+
+## What I will do next
+Plot the Project 1 series and inspect its ACF.
+
+## AI assistance
+
+None.
+
+## Links
+- [Project 1](../../projects/project-01/index.html)
+

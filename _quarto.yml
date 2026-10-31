@@ -1,0 +1,67 @@
+project:
+  type: website
+  resources:
+    - images/uct-logo.png   # make sure the logo is copied to the built site
+    - images/projects-banner.svg    # banner figure for the projects page
+  output-dir: _output
+  render:                            # only build these, so stray notes stay out
+    - index.qmd
+    - reflective_commentary.qmd
+    - projects/*.qmd
+    - appendix/*.qmd
+    - journal/*.qmd
+    - projects/*/*.qmd
+    - section_*/*.qmd
+    - journal/*.qmd
+    - journal/entries/*.qmd
+website:
+  title: "Time Series Portfolio"
+  navbar:
+    style: "floating"
+    background: "#000000" # pure black floating tabs
+    foreground: "#ffffff" # white tab text
+    search: true
+    left:
+      - text: "Home"
+        href: index.qmd
+      - text: "Reflection"
+        href: reflective_commentary.html
+      - text: "Journal"
+        href: journal/index.html
+      - text: "Projects"
+        href: projects/index.html
+      - text: "Appendix"
+        menu:
+          - text: "Code & Data"
+            href: appendix/code_and_data.html
+          - text: "AI Use Log"
+            href: appendix/ai_use_log.html
+
+  page-footer:
+    left: "Ethon Felix | UCT Statistics & Data Science Honours"
+    center: "© 2026"
+    right: "Last updated: Oct 30, 2026"
+
+format:
+  html:
+    theme: default        # light base theme (replaces the dark one)
+    css: styles.css       # custom styling below
+    toc: true
+    toc-depth: 2
+    include-in-header:               # faster font loading than @import
+      text: |
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+    # --- show/hide code, applied to every page ---
+    code-fold: true
+    code-summary: "Show code"
+    code-tools: true                 # adds a "show/hide all code" menu
+    code-line-numbers: false         # keep collapsed blocks compact
+    highlight-style: atom-one-dark
+    html-math-method: katex      # no MathJax, no polyfill.io
+
+execute:
+  freeze: auto
+  warning: false                     # hide package warnings
+  message: false                     # hide package messages
+  

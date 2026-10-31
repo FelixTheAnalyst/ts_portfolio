@@ -1,0 +1,27 @@
+---
+title: "Thu 10 Sept 2026"
+date: 2026-09-10
+categories: ["Part 1 consolidation"]
+---
+
+**Session / topic:** Model fitting and diagnostics
+
+## What I did
+Fitted candidate ARIMA models and ran residual diagnostics including Ljung-Box tests.
+
+## What I learned
+Information criteria rank models, but only the residual checks say whether any model is adequate.
+
+## Difficulties and open questions
+Several models were nearly tied on AIC.
+
+## What I will do next
+Build benchmark forecasts to compare against.
+
+## AI assistance
+
+None.
+
+## Links
+- [Project 1](../../projects/project-01/index.thml)
+

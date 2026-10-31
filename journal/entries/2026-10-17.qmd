@@ -1,0 +1,26 @@
+---
+title: "Sat 17 Oct 2026"
+date: 2026-10-17
+categories: ["Hidden Markov models (1)"]
+---
+
+**Session / topic:** Section 2: ETS and harmonic regression
+
+## What I did
+Fitted ETS and a harmonic regression with ARMA errors on the EAF series.
+
+## What I learned
+Harmonic terms capture seasonality compactly when the period is long.
+
+## Difficulties and open questions
+Selecting the number of harmonics.
+
+## What I will do next
+Code the HMM routines.
+
+## AI assistance
+None.
+
+## Links
+- [Section 2](../../section-2/section_2.html)
+

@@ -1,0 +1,27 @@
+---
+title: "Wed 14 Oct 2026"
+date: 2026-10-14
+categories: ["Hidden Markov models (1)"]
+---
+
+**Session / topic:** Kalman filter and smoother
+
+## What I did
+Implemented the filter and smoother and checked them against an independent implementation.
+
+## What I learned
+A second implementation catches indexing mistakes that diagnostics miss.
+
+## Difficulties and open questions
+Getting the smoother recursions right.
+
+## What I will do next
+Add the likelihood and tests.
+
+## AI assistance
+Used Claude to help interpret an error (smoother); I fixed the code myself.
+
+## Links
+- [Project 4](../../projects/project-04/index.html)
+- [Appendix](../../appendix/code_and_data.html)
+

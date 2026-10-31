@@ -1,0 +1,28 @@
+---
+title: "Fri 18 Sept 2026"
+date: 2026-09-18
+categories: ["Exponential smoothing"]
+---
+
+**Session / topic:** Building the EAF series
+
+## What I did
+Wrote the EAF extraction, handled the blank hours and aggregated to weekly values.
+
+## What I learned
+The aggregation level fixes the frequencies I can see: weekly data covers cycles from about 52 weeks down to 2.
+
+## Difficulties and open questions
+Coverage ends in September 2023, so the usable window is short.
+
+## What I will do next
+Pull and align the All Share series.
+
+## AI assistance
+
+None.
+
+## Links
+- [Project 2](../../projects/project-02/index.html)
+- [Appendix](../../appendix/code_and_data.html)
+

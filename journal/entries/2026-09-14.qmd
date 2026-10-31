@@ -1,0 +1,26 @@
+---
+title: "Mon 14 Sept 2026"
+date: 2026-09-14
+categories: ["Exponential smoothing"]
+---
+
+**Session / topic:** Exponential smoothing
+
+## What I did
+Read the chapter on simple, Holt and Holt-Winters smoothing and the ETS state-space form.
+
+## What I learned
+ETS written as an innovations state-space model gives a likelihood and prediction intervals, and links to later state-space work.
+
+## Difficulties and open questions
+Deciding between additive and multiplicative components.
+
+## What I will do next
+Fit ETS to the Project 1 series.
+
+## AI assistance
+Used Claude to clarify [ETS forms]; the work and write-up are my own.
+
+## Links
+- [Project 1](../../projects/project-01/index.html)
+

@@ -1,0 +1,26 @@
+---
+title: "Thu 08 Oct 2026"
+date: 2026-10-08
+categories: ["Kalman filter"]
+---
+
+**Session / topic:** Simulation calibration
+
+## What I did
+Calibrated the simulation to the SARS anchors and checked that the fit recovers the truth.
+
+## What I learned
+A simulation shows whether the method works before it is trusted on real data.
+
+## Difficulties and open questions
+Matching the simulation to a small number of anchors.
+
+## What I will do next
+Fit quasi-Poisson to Google Trends.
+
+## AI assistance
+Discussed the design with Claude (anchors); decisions and code are mine.
+
+## Links
+- [Project 3](../../projects/project-03/index.html)
+

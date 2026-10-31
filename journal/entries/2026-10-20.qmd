@@ -1,0 +1,26 @@
+---
+title: "Tue 20 Oct 2026"
+date: 2026-10-20
+categories: ["Hidden Markov models (2) and assembly"]
+---
+
+**Session / topic:** State selection
+
+## What I did
+Fitted HMMs with different numbers of states and compared them with BIC.
+
+## What I learned
+BIC penalises extra states, but simulations show it can still over- or under-select.
+
+## Difficulties and open questions
+Interpreting what the states mean.
+
+## What I will do next
+Check the state durations.
+
+## AI assistance
+None.
+
+## Links
+- [Section 2](../../section_2/section_2.html)
+

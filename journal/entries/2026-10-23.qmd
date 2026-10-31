@@ -1,0 +1,26 @@
+---
+title: "Fri 23 Oct 2026"
+date: 2026-10-23
+categories: ["Hidden Markov models (2) and assembly"]
+---
+
+**Session / topic:** Assembling the site
+
+## What I did
+Fixed render and styling issues and started the code-and-data reconciliation.
+
+## What I learned
+Rendering from the project root gives the banner and navigation on every page.
+
+## Difficulties and open questions
+Broken links from inconsistent file names.
+
+## What I will do next
+Draft the reflective commentary.
+
+## AI assistance
+Used Claude to help interpret an error (render and link errors); I fixed the code myself.
+
+## Links
+- [Appendix](../../appendix/code_and_data.html)
+

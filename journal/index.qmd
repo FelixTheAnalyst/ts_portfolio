@@ -1,0 +1,44 @@
+---
+title: "Evolution of learning"
+page-layout: full
+listing:
+  id: entries-listing        # must match the div id below
+  contents: entries          # every .qmd in journal/entries/
+  type: table
+  sort: "date"               # oldest first
+  fields: [date, title, categories]
+  field-display-names:
+    date: "Date"
+    title: "Entry"
+    categories: "Phase"
+  filter-ui: true            # search box above the table
+  sort-ui: false
+  categories: false
+  page-size: 50              # show all 50 entries on one page
+---
+
+This journal records how my understanding and the four projects developed
+between 7 September and 26 October 2026. Each entry covers what I did, what I
+learned, what was difficult and what came next. Entries link to the relevant
+project, section or appendix page.
+
+## Overview
+
+My understanding moved from fitting models to checking them. Early on I was identifying ARIMA structure and benchmarking forecasts. The Project 2 work taught me that a result needs a proper null distribution, since I had to simulate the maximum of the coherence before I could judge my peak. In October the hand-coded estimators (IRLS, the Kalman filter, Baum-Welch) made validation against a known answer a habit. By the end I was spending more time on what the data could support than on which model fitted best.
+
+## Phases
+
+| Dates | Course material | Project work |
+|---|---|---|
+| 7–10 Sep | Part 1: ARIMA, benchmarks | Project 1 scoping and baselines |
+| 11–20 Sep | Exponential smoothing | Project 1 forecasts; Project 2 data |
+| 21–26 Sep | Regression with ARMA errors | Project 2 coherence; Section 1 |
+| 27 Sep–4 Oct | State-space models | Project 3 design; finish Section 1 |
+| 5–11 Oct | Kalman filter | Project 3 GLM; Project 4 data |
+| 12–18 Oct | Hidden Markov models | Project 4 model; Section 2 |
+| 19–26 Oct | HMM applications | Project 4 write-up; assembly |
+
+
+## All entries
+
+{#entries-listing}

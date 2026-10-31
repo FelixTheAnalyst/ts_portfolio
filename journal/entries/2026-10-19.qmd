@@ -1,0 +1,27 @@
+---
+title: "Mon 19 Oct 2026"
+date: 2026-10-19
+categories: ["Hidden Markov models (2) and assembly"]
+---
+
+**Session / topic:** HMM estimation (notes released)
+
+## What I did
+Coded Baum-Welch and Viterbi decoding for the HMM.
+
+## What I learned
+EM improves the likelihood at every step but can stop at a local maximum.
+
+## Difficulties and open questions
+Initial values changed the answer.
+
+## What I will do next
+Fit models with different numbers of states.
+
+## AI assistance
+Used Claude to help interpret an error (Baum-Welch start values); I fixed the code myself.
+
+## Links
+- [Section 2](../../section_2/section_2.html)
+- [Appendix](../../appendix/code_and_data.html)
+

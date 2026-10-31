@@ -1,0 +1,26 @@
+---
+title: "Sun 20 Sept 2026"
+date: 2026-09-20
+categories: ["Exponential smoothing"]
+---
+
+**Session / topic:** Weekly reflection
+
+## What I did
+Rewrote the Project 2 question to be modest given the short sample.
+
+## What I learned
+Sample length limits what I can credibly claim.
+
+## Difficulties and open questions
+Resisting the urge to over-claim.
+
+## What I will do next
+Read the regression with ARMA errors notes.
+
+## AI assistance
+Discussed the design with Claude (framing Project 2); decisions and code are mine.
+
+## Links
+- [Project 2](../../projects/project-02/index.html)
+

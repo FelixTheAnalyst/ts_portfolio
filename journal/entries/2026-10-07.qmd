@@ -1,0 +1,26 @@
+---
+title: "Wed 07 Oct 2026"
+date: 2026-10-07
+categories: ["Kalman filter"]
+---
+
+**Session / topic:** Profiling and model comparison
+
+## What I did
+Profiled the dispersion and decay rates and compared against Poisson and quasi-Poisson fits.
+
+## What I learned
+Profile likelihood shows how well a parameter is determined, not only its estimate.
+
+## Difficulties and open questions
+The profile was flat in places.
+
+## What I will do next
+Calibrate the simulation.
+
+## AI assistance
+None.
+
+## Links
+- [P3](../../projects/project-03/index.html)
+

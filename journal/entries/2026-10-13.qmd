@@ -1,0 +1,26 @@
+---
+title: "Tue 13 Oct 2026"
+date: 2026-10-13
+categories: ["Hidden Markov models (1)"]
+---
+
+**Session / topic:** Project 4 design
+
+## What I did
+Designed a time-varying regression in state-space form with random-walk coefficients.
+
+## What I learned
+Letting coefficients drift is a state-space idea rather than a regression add-on.
+
+## Difficulties and open questions
+Choosing which variances to estimate.
+
+## What I will do next
+Implement the filter and smoother.
+
+## AI assistance
+Discussed the design with Claude (state-space design); decisions and code are mine.
+
+## Links
+- [Project 4](../../projects/project-04/index.html)
+

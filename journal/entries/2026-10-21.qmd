@@ -1,0 +1,26 @@
+---
+title: "Wed 21 Oct 2026"
+date: 2026-10-21
+categories: ["Hidden Markov models (2) and assembly"]
+---
+
+**Session / topic:** Duration check
+
+## What I did
+Compared the fitted state durations with the geometric distribution an HMM implies, and fixed a logLik error with depmixS4.
+
+## What I learned
+An HMM implies geometric durations, which real regimes may not follow.
+
+## Difficulties and open questions
+Fixing the error by loading the package inside the chunk.
+
+## What I will do next
+Write up Section 2.
+
+## AI assistance
+Used Claude to help interpret an error (`depmixS4` logLik); I fixed the code myself.
+
+## Links
+- [Section 2](../../section_2/section_2.html)
+

@@ -1,0 +1,27 @@
+---
+title: "Sun 11 Oct 2026"
+date: 2026-10-11
+categories: ["Kalman filter"]
+---
+
+**Session / topic:** Project 4 data
+
+## What I did
+Pulled six series from December 2014 to October 2026 and checked their coverage.
+
+## What I learned
+Data checks come before modelling: one index had missing values.
+
+## Difficulties and open questions
+The All Share index had gaps that needed an explicit rule.
+
+## What I will do next
+Design the state-space regression.
+
+## AI assistance
+None.
+
+## Links
+- [Project 4](../../projects/project-04/index.html)
+- [Appendix](../../appendix/code_and_data.html)
+

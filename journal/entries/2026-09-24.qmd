@@ -1,0 +1,27 @@
+---
+title: "Thu 24 Sept 2026"
+date: 2026-09-24
+categories: ["Regression with ARMA errors"]
+---
+
+**Session / topic:** Family-wise null
+
+## What I did
+Simulated the null distribution of the maximum coherence and validated my code against spec.pgram.
+
+## What I learned
+A maximum over many frequencies needs its own null, not a single-frequency critical value.
+
+## Difficulties and open questions
+My results differed slightly from spec.pgram until I matched the demeaning.
+
+## What I will do next
+Run the robustness checks.
+
+## AI assistance
+Used Claude to help interpret an error (demeaning vs `spec.pgram`); I fixed the code myself.
+
+## Links
+- [Project 2](../../projects/project-02/index.html)
+- [Appendix](../../appendix/code_and_data.html)
+

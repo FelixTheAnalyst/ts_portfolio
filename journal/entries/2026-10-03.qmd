@@ -1,0 +1,27 @@
+---
+title: "Sat 03 Oct 2026"
+date: 2026-10-03
+categories: ["State-space models"]
+---
+
+**Session / topic:** Project 3 structure
+
+## What I did
+Wrote the data extraction script and set up the Project 3 folder.
+
+## What I learned
+Reproducibility depends on scripts that rebuild every dataset from source.
+
+## Difficulties and open questions
+Keeping file paths consistent across projects.
+
+## What I will do next
+Implement IRLS.
+
+## AI assistance
+None.
+
+## Links
+- [Project 3](../../projects/project-03/index.html)
+- [Appendix](../../appendix/code_and_data.html)
+

@@ -1,0 +1,26 @@
+---
+title: "Sun 25 Oct 2026"
+date: 2026-10-25
+categories: ["Hidden Markov models (2) and assembly"]
+---
+
+**Session / topic:** AI log and journal
+
+## What I did
+Completed the AI use log and checked the journal entries against what actually happened.
+
+## What I learned
+Keeping the log current is easier than reconstructing it afterwards.
+
+## Difficulties and open questions
+Remembering all the places AI helped.
+
+## What I will do next
+Final checks and submission.
+
+## AI assistance
+None.
+
+## Links
+- [AI Usage](../../appendix/ai_use_log.html)
+

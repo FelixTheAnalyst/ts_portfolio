@@ -1,0 +1,27 @@
+---
+title: "Tue 06 Oct 2026"
+date: 2026-10-06
+categories: ["Kalman filter"]
+---
+
+**Session / topic:** IRLS for negative binomial
+
+## What I did
+Hand-coded IRLS for the negative-binomial GLM with an offset.
+
+## What I learned
+IRLS is Fisher scoring, and the working weights carry the variance structure.
+
+## Difficulties and open questions
+Convergence was fragile with the dispersion parameter free.
+
+## What I will do next
+Profile the dispersion and decay parameters.
+
+## AI assistance
+Used Claude to help interpret an error (IRLS convergence); I fixed the code myself.
+
+## Links
+- [Project 3](../../projects/project-03/index.html)
+- [Appendix](../../appendix/code_and_data.html)
+

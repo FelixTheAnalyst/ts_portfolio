@@ -1,0 +1,26 @@
+---
+title: "Mon 21 Sept 2026"
+date: 2026-09-21
+categories: ["Regression with ARMA errors"]
+---
+
+**Session / topic:** Regression with correlated errors
+
+## What I did
+Read the notes on GLS and regression with ARMA errors.
+
+## What I learned
+Autocorrelated errors leave OLS unbiased but invalidate its standard errors.
+
+## Difficulties and open questions
+The notation is heavy and took two passes.
+
+## What I will do next
+Compute smoothed periodograms for Project 2.
+
+## AI assistance
+Used Claude to clarify [GLS notation]; the work and write-up are my own.
+
+## Links
+- [Project 2](../../projects/project-02/index.html)
+

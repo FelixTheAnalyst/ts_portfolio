@@ -1,0 +1,27 @@
+---
+title: "Mon 26 Oct 2026"
+date: 2026-10-26
+categories: ["Hidden Markov models (2) and assembly"]
+---
+
+**Session / topic:** Final checks
+
+## What I did
+Ran a full render, checked every link and reread each page.
+
+## What I learned
+A full rebuild from raw data shows whether the portfolio really reproduces.
+
+## Difficulties and open questions
+Late formatting problems.
+
+## What I will do next
+Submit by the deadline.
+
+## AI assistance
+None.
+
+## Links
+- [Appendix](../../appendix/code_and_data.html)
+- [AI Usage](../../appendix/ai_use_log.html)
+

@@ -1,0 +1,31 @@
+---
+title: "Fri 11 Sept 2026"
+date: 2026-09-11
+categories: ["Exponential smoothing"]
+---
+
+::: {.callout-warning}
+## Draft - edit to match what actually happened
+Remove this banner once the entry is accurate.
+:::
+
+**Session / topic:** Benchmarks (exponential smoothing notes released)
+
+## What I did
+Built naive, seasonal naive and drift benchmarks. Skimmed the newly released exponential smoothing notes.
+
+## What I learned
+A complex model must beat a simple benchmark to justify itself.
+
+## Difficulties and open questions
+Choosing between MASE and RMSE as the main accuracy measure.
+
+## What I will do next
+Set up rolling-origin evaluation.
+
+## AI assistance
+*[State what AI help you used that day, or write "None". Match your AI Use Log.]*
+
+## Links
+- [P1](../../projects/project-01/index.qmd)
+

@@ -1,0 +1,26 @@
+---
+title: "Tue 22 Sept 2026"
+date: 2026-09-22
+categories: ["Regression with ARMA errors"]
+---
+
+**Session / topic:** Periodograms
+
+## What I did
+Computed periodograms for both series and smoothed them with a modified Daniell kernel.
+
+## What I learned
+The raw periodogram is inconsistent, and smoothing trades bias for variance.
+
+## Difficulties and open questions
+Choosing the smoothing span.
+
+## What I will do next
+Estimate squared coherence.
+
+## AI assistance
+None.
+
+## Links
+- [Project 2](../../projects/project-02/index.html)
+

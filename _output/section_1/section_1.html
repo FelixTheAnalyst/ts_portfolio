@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.433">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Time Series Portfolio - Section 1: ARIMA, Volatility and Spectral Analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>
+
+      .quarto-title-block .quarto-title-banner h1,
+      .quarto-title-block .quarto-title-banner h2,
+      .quarto-title-block .quarto-title-banner h3,
+      .quarto-title-block .quarto-title-banner h4,
+      .quarto-title-block .quarto-title-banner h5,
+      .quarto-title-block .quarto-title-banner h6
+      {
+        color: #ffffff;
+      }
+
+      .quarto-title-block .quarto-title-banner {
+        color: #ffffff;
+background: #000000;
+      }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&amp;family=Playfair+Display:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>#title-block-header::after { display: none; }</style>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css">
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Time Series Portfolio</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../reflective_commentary.html" rel="" target="">
+ <span class="menu-text">Reflection</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../journal/index.html" rel="" target="">
+ <span class="menu-text">Journal</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../projects/index.html" rel="" target="">
+ <span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-appendix" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Appendix</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-appendix">    
+        <li>
+    <a class="dropdown-item" href="../appendix/code_and_data.html" rel="" target="">
+ <span class="dropdown-text">Code &amp; Data</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../appendix/ai_use_log.html" rel="" target="">
+ <span class="dropdown-text">AI Use Log</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <div class="quarto-navbar-tools ms-auto">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <div class="quarto-title-block"><div><h1 class="title">Section 1: ARIMA, Volatility and Spectral Analysis</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+            <p class="subtitle lead">Worked tutorials, an implementation from first principles, and one idea beyond the notes</p>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#tutorial-1.1-arima-forecasting-of-eskom-eaf" id="toc-tutorial-1.1-arima-forecasting-of-eskom-eaf" class="nav-link" data-scroll-target="#tutorial-1.1-arima-forecasting-of-eskom-eaf">Tutorial 1.1: ARIMA forecasting of Eskom EAF</a></li>
+  <li><a href="#tutorial-1.2-the-periodogram-of-eaf" id="toc-tutorial-1.2-the-periodogram-of-eaf" class="nav-link" data-scroll-target="#tutorial-1.2-the-periodogram-of-eaf">Tutorial 1.2: The periodogram of EAF</a></li>
+  <li><a href="#implementation-1.3-whittle-estimation-from-first-principles" id="toc-implementation-1.3-whittle-estimation-from-first-principles" class="nav-link" data-scroll-target="#implementation-1.3-whittle-estimation-from-first-principles">Implementation 1.3: Whittle estimation from first principles</a></li>
+  <li><a href="#beyond-the-notes-1.4-long-memory-and-the-gph-estimator" id="toc-beyond-the-notes-1.4-long-memory-and-the-gph-estimator" class="nav-link" data-scroll-target="#beyond-the-notes-1.4-long-memory-and-the-gph-estimator">Beyond the notes 1.4: Long memory and the GPH estimator</a></li>
+  <li><a href="#reflection" id="toc-reflection" class="nav-link" data-scroll-target="#reflection">Reflection</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="overview" class="level1">
+<h1>Overview</h1>
+<p>This section covers the classical toolkit: ARIMA models, ARCH and GARCH models for changing variance, and spectral analysis. They all describe the same thing, the autocovariance structure of a series. ARIMA summarises it with a few parameters, GARCH models the variance that is left over, and the spectrum shows the same information by cycle length.</p>
+<p>I applied these ideas mainly in Project 1 (a GARCH model with a search-interest regressor) and Project 2 (cross-spectral coherence). The tutorials here add three things: ARIMA forecasting and the periodogram on Eskom’s EAF, a Whittle estimator that I coded myself and tested against maximum likelihood, and a look at long memory with the GPH estimator.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Topic</th>
+<th>Where it appears</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>AR, MA, ARMA, ARIMA</td>
+<td>Tutorial 1.1</td>
+</tr>
+<tr class="even">
+<td>ARCH and GARCH</td>
+<td><a href="../projects/project-01/index.html">Project 1</a></td>
+</tr>
+<tr class="odd">
+<td>Spectral analysis and filtering</td>
+<td><a href="../projects/project-02/index.html">Project 2</a>, Tutorial 1.2</td>
+</tr>
+<tr class="even">
+<td>Whittle estimation</td>
+<td>Implementation 1.3</td>
+</tr>
+<tr class="odd">
+<td>Long memory</td>
+<td>Beyond the notes 1.4</td>
+</tr>
+</tbody>
+</table>
+<p>All tutorials use the weekly Eskom Energy Availability Factor (EAF) built for Project 2, which has 232 weeks from Apr 2019 to Sept 2023.</p>
+</section>
+<section id="tutorial-1.1-arima-forecasting-of-eskom-eaf" class="level1">
+<h1>Tutorial 1.1: ARIMA forecasting of Eskom EAF</h1>
+<p><strong>Aim.</strong> Fit an ARIMA model to weekly EAF by the Box-Jenkins steps, forecast 26 weeks ahead with prediction intervals, and judge the forecasts on a hold-out.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">Series =</span> <span class="fu">c</span>(<span class="st">"EAF level"</span>, <span class="st">"Weekly change in EAF"</span>),</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>       <span class="st">`</span><span class="at">ADF p</span><span class="st">`</span>  <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">suppressWarnings</span>(<span class="fu">adf.test</span>(y)<span class="sc">$</span>p.value), <span class="fu">suppressWarnings</span>(<span class="fu">adf.test</span>(dy)<span class="sc">$</span>p.value)),</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>       <span class="st">`</span><span class="at">KPSS p</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">suppressWarnings</span>(<span class="fu">kpss.test</span>(y, <span class="at">null =</span> <span class="st">"Trend"</span>)<span class="sc">$</span>p.value),</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">suppressWarnings</span>(<span class="fu">kpss.test</span>(dy, <span class="at">null =</span> <span class="st">"Level"</span>)<span class="sc">$</span>p.value))) <span class="sc">|&gt;</span> <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="tbl-stationarity" class="anchored">
+<table class="table table-sm table-striped small">
+<caption>Table&nbsp;1: Unit-root and stationarity tests. ADF null: unit root. KPSS null: stationary around a trend (level) or constant (change).</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Series</th>
+<th style="text-align: right;">ADF p</th>
+<th style="text-align: right;">KPSS p</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">EAF level</td>
+<td style="text-align: right;">0.044</td>
+<td style="text-align: right;">0.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Weekly change in EAF</td>
+<td style="text-align: right;">0.010</td>
+<td style="text-align: right;">0.1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ACF and PACF in one data frame (lag 0 dropped from the ACF)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>cf_df <span class="ot">&lt;-</span> <span class="cf">function</span>(z, <span class="at">lag.max =</span> <span class="dv">26</span>) {</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  a <span class="ot">&lt;-</span> <span class="fu">acf</span>(z, <span class="at">lag.max =</span> lag.max, <span class="at">plot =</span> <span class="cn">FALSE</span>); p <span class="ot">&lt;-</span> <span class="fu">pacf</span>(z, <span class="at">lag.max =</span> lag.max, <span class="at">plot =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(<span class="fu">tibble</span>(<span class="at">type =</span> <span class="st">"ACF"</span>,  <span class="at">lag =</span> <span class="fu">as.numeric</span>(a<span class="sc">$</span>lag)[<span class="sc">-</span><span class="dv">1</span>], <span class="at">r =</span> <span class="fu">as.numeric</span>(a<span class="sc">$</span>acf)[<span class="sc">-</span><span class="dv">1</span>]),</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>            <span class="fu">tibble</span>(<span class="at">type =</span> <span class="st">"PACF"</span>, <span class="at">lag =</span> <span class="fu">as.numeric</span>(p<span class="sc">$</span>lag),     <span class="at">r =</span> <span class="fu">as.numeric</span>(p<span class="sc">$</span>acf)))</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">cf_df</span>(dy) <span class="sc">|&gt;</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(lag, r)) <span class="sc">+</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>) <span class="sc">*</span> <span class="fl">1.96</span> <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="fu">length</span>(dy)), <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">colour =</span> pal[[<span class="st">"grey"</span>]]) <span class="sc">+</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">xend =</span> lag, <span class="at">yend =</span> <span class="dv">0</span>), <span class="at">colour =</span> pal[[<span class="st">"ink"</span>]], <span class="at">linewidth =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>type) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Lag (weeks)"</span>, <span class="at">y =</span> <span class="cn">NULL</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-cf" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="section_1_files/figure-html/fig-cf-1.png" class="img-fluid figure-img" width="1400"></p>
+<figcaption class="figure-caption">Figure&nbsp;1: Autocorrelation and partial autocorrelation of the weekly change in EAF. Dashed lines are approximate 95% bounds.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The level is non-stationary and the weekly change is stationary, so I difference once (<span class="math inline">d=1</span>). I hold out the last 26 weeks, choose <span class="math inline">(p,q)</span> on the training data by AIC over a small grid, and check the residuals.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>hold <span class="ot">&lt;-</span> <span class="dv">26</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> y[<span class="dv">1</span><span class="sc">:</span>(n <span class="sc">-</span> hold)]; test <span class="ot">&lt;-</span> y[(n <span class="sc">-</span> hold <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span>n]               <span class="co"># training set and 26-week hold-out</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>grid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">p =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">q =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">3</span>)                               <span class="co"># candidate orders, d = 1 throughout</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>cand <span class="ot">&lt;-</span> <span class="fu">pmap_dfr</span>(grid, <span class="cf">function</span>(p, q) {</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  f <span class="ot">&lt;-</span> <span class="fu">tryCatch</span>(<span class="fu">arima</span>(train, <span class="at">order =</span> <span class="fu">c</span>(p, <span class="dv">1</span>, q)), <span class="at">error =</span> <span class="cf">function</span>(e) <span class="cn">NULL</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(f)) <span class="fu">return</span>(<span class="cn">NULL</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="at">p =</span> p, <span class="at">q =</span> q, <span class="at">AIC =</span> <span class="fu">AIC</span>(f), <span class="at">BIC =</span> <span class="fu">BIC</span>(f))</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>}) <span class="sc">|&gt;</span> <span class="fu">arrange</span>(AIC)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>best <span class="ot">&lt;-</span> cand[<span class="dv">1</span>, ]</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">arima</span>(train, <span class="at">order =</span> <span class="fu">c</span>(best<span class="sc">$</span>p, <span class="dv">1</span>, best<span class="sc">$</span>q))</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>lb  <span class="ot">&lt;-</span> <span class="fu">Box.test</span>(<span class="fu">residuals</span>(fit), <span class="at">lag =</span> <span class="dv">13</span>, <span class="at">type =</span> <span class="st">"Ljung-Box"</span>, <span class="at">fitdf =</span> best<span class="sc">$</span>p <span class="sc">+</span> best<span class="sc">$</span>q)<span class="sc">$</span>p.value</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>cand <span class="sc">|&gt;</span> <span class="fu">head</span>(<span class="dv">5</span>) <span class="sc">|&gt;</span> <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="tbl-cand" class="anchored">
+<table class="table table-sm table-striped small">
+<caption>Table&nbsp;2: The five best ARIMA(p,1,q) models on the training data.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">p</th>
+<th style="text-align: right;">q</th>
+<th style="text-align: right;">AIC</th>
+<th style="text-align: right;">BIC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">854.8</td>
+<td style="text-align: right;">871.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">855.6</td>
+<td style="text-align: right;">875.6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">857.1</td>
+<td style="text-align: right;">867.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">857.9</td>
+<td style="text-align: right;">867.9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">859.1</td>
+<td style="text-align: right;">872.3</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>The selected model is <strong>ARIMA(2,1,2)</strong>, and the Ljung-Box test on its residuals gives <span class="math inline">p</span> = 0.300, so there is no evidence of leftover autocorrelation.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>pr <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">n.ahead =</span> hold)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>fc <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">date =</span> eaf<span class="sc">$</span>date[(n <span class="sc">-</span> hold <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span>n], <span class="at">fit_mean =</span> <span class="fu">as.numeric</span>(pr<span class="sc">$</span>pred), <span class="at">se =</span> <span class="fu">as.numeric</span>(pr<span class="sc">$</span>se),</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">l80 =</span> fit_mean <span class="sc">-</span> <span class="fu">qnorm</span>(<span class="fl">0.90</span>) <span class="sc">*</span> se, <span class="at">u80 =</span> fit_mean <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fl">0.90</span>) <span class="sc">*</span> se,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">l95 =</span> fit_mean <span class="sc">-</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>) <span class="sc">*</span> se, <span class="at">u95 =</span> fit_mean <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>) <span class="sc">*</span> se, <span class="at">actual =</span> test)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> <span class="fu">tibble</span>(<span class="at">date =</span> eaf<span class="sc">$</span>date[<span class="dv">1</span><span class="sc">:</span>(n <span class="sc">-</span> hold)], <span class="at">v =</span> train) <span class="sc">|&gt;</span> <span class="fu">tail</span>(<span class="dv">60</span>), <span class="fu">aes</span>(date, v), <span class="at">colour =</span> pal[[<span class="st">"ink"</span>]]) <span class="sc">+</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">data =</span> fc, <span class="fu">aes</span>(date, <span class="at">ymin =</span> l95, <span class="at">ymax =</span> u95), <span class="at">fill =</span> pal[[<span class="st">"blue"</span>]], <span class="at">alpha =</span> <span class="fl">0.12</span>) <span class="sc">+</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">data =</span> fc, <span class="fu">aes</span>(date, <span class="at">ymin =</span> l80, <span class="at">ymax =</span> u80), <span class="at">fill =</span> pal[[<span class="st">"blue"</span>]], <span class="at">alpha =</span> <span class="fl">0.22</span>) <span class="sc">+</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> fc, <span class="fu">aes</span>(date, fit_mean), <span class="at">colour =</span> pal[[<span class="st">"blue"</span>]], <span class="at">linewidth =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> fc, <span class="fu">aes</span>(date, actual), <span class="at">colour =</span> pal[[<span class="st">"ink"</span>]], <span class="at">size =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"EAF (%)"</span>)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>rmse_arima <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((test <span class="sc">-</span> fc<span class="sc">$</span>fit_mean)<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>rmse_naive <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((test <span class="sc">-</span> <span class="fu">tail</span>(train, <span class="dv">1</span>))<span class="sc">^</span><span class="dv">2</span>))                 <span class="co"># naive: repeat the last observation</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>cov80 <span class="ot">&lt;-</span> <span class="fu">mean</span>(test <span class="sc">&gt;=</span> fc<span class="sc">$</span>l80 <span class="sc">&amp;</span> test <span class="sc">&lt;=</span> fc<span class="sc">$</span>u80); cov95 <span class="ot">&lt;-</span> <span class="fu">mean</span>(test <span class="sc">&gt;=</span> fc<span class="sc">$</span>l95 <span class="sc">&amp;</span> test <span class="sc">&lt;=</span> fc<span class="sc">$</span>u95)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-arima-fc" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="section_1_files/figure-html/fig-arima-fc-1.png" class="img-fluid figure-img" width="1400"></p>
+<figcaption class="figure-caption">Figure&nbsp;2: 26-week hold-out forecast of EAF with 80% and 95% prediction intervals. Points are the actual values.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>On the 26-week hold-out the ARIMA forecast has an RMSE of 4.02 against 3.59 for the naive forecast (repeat the last value). The 80% and 95% intervals contain 96% and 96% of the actual values. The model does not beat the naive benchmark, which is a useful warning about how little weekly structure there is.</p>
+<p><strong>Limitations.</strong> This is a non-seasonal model, but EAF has an annual cycle (planned outages are lower in winter). A seasonal ARIMA with period 52 needs far more than 232 weekly observations, so Section 2 handles seasonality with harmonic regression instead. Prediction intervals assume Gaussian, constant-variance errors, which weekly EAF may not satisfy.</p>
+</section>
+<section id="tutorial-1.2-the-periodogram-of-eaf" class="level1">
+<h1>Tutorial 1.2: The periodogram of EAF</h1>
+<p><strong>Aim.</strong> Look at EAF in the frequency domain and test whether the annual cycle shows up.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>xd <span class="ot">&lt;-</span> <span class="fu">resid</span>(<span class="fu">lm</span>(y <span class="sc">~</span> <span class="fu">seq_along</span>(y)))                                   <span class="co"># remove the linear trend</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>sp <span class="ot">&lt;-</span> <span class="fu">spec.pgram</span>(xd, <span class="at">spans =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">5</span>), <span class="at">taper =</span> <span class="fl">0.1</span>, <span class="at">detrend =</span> <span class="cn">FALSE</span>, <span class="at">demean =</span> <span class="cn">TRUE</span>, <span class="at">plot =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>spec_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">freq =</span> sp<span class="sc">$</span>freq, <span class="at">spec =</span> sp<span class="sc">$</span>spec,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">lo =</span> sp<span class="sc">$</span>spec <span class="sc">*</span> sp<span class="sc">$</span>df <span class="sc">/</span> <span class="fu">qchisq</span>(<span class="fl">0.975</span>, sp<span class="sc">$</span>df),      <span class="co"># 95% limits from the chi-square distribution</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">hi =</span> sp<span class="sc">$</span>spec <span class="sc">*</span> sp<span class="sc">$</span>df <span class="sc">/</span> <span class="fu">qchisq</span>(<span class="fl">0.025</span>, sp<span class="sc">$</span>df))</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(spec_df, <span class="fu">aes</span>(freq)) <span class="sc">+</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> lo, <span class="at">ymax =</span> hi), <span class="at">fill =</span> pal[[<span class="st">"blue"</span>]], <span class="at">alpha =</span> <span class="fl">0.15</span>) <span class="sc">+</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> spec), <span class="at">colour =</span> pal[[<span class="st">"blue"</span>]], <span class="at">linewidth =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">1</span> <span class="sc">/</span> <span class="fl">52.18</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">colour =</span> pal[[<span class="st">"ink"</span>]]) <span class="sc">+</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>() <span class="sc">+</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="dv">1</span> <span class="sc">/</span> <span class="fu">c</span>(<span class="dv">104</span>, <span class="dv">52</span>, <span class="dv">26</span>, <span class="dv">13</span>, <span class="dv">8</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"104"</span>, <span class="st">"52"</span>, <span class="st">"26"</span>, <span class="st">"13"</span>, <span class="st">"8"</span>), <span class="at">name =</span> <span class="st">"Period (weeks)"</span>) <span class="sc">+</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"Smoothed spectrum"</span>)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>f_pk <span class="ot">&lt;-</span> sp<span class="sc">$</span>freq[<span class="fu">which.max</span>(sp<span class="sc">$</span>spec)]</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>band <span class="ot">&lt;-</span> sp<span class="sc">$</span>freq <span class="sc">&gt;=</span> <span class="dv">1</span> <span class="sc">/</span> <span class="dv">60</span> <span class="sc">&amp;</span> sp<span class="sc">$</span>freq <span class="sc">&lt;=</span> <span class="dv">1</span> <span class="sc">/</span> <span class="dv">45</span>                       <span class="co"># periods of 45 to 60 weeks</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>share <span class="ot">&lt;-</span> <span class="fu">sum</span>(sp<span class="sc">$</span>spec[band]) <span class="sc">/</span> <span class="fu">sum</span>(sp<span class="sc">$</span>spec)</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Cross-check: regress on one annual harmonic and test it</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>tt <span class="ot">&lt;-</span> <span class="fu">seq_along</span>(y); w <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">/</span> <span class="fl">52.18</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>h1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(xd <span class="sc">~</span> <span class="fu">sin</span>(w <span class="sc">*</span> tt) <span class="sc">+</span> <span class="fu">cos</span>(w <span class="sc">*</span> tt))</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>r2 <span class="ot">&lt;-</span> <span class="fu">summary</span>(h1)<span class="sc">$</span>r.squared; p_h <span class="ot">&lt;-</span> <span class="fu">anova</span>(<span class="fu">lm</span>(xd <span class="sc">~</span> <span class="dv">1</span>), h1)<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">2</span>]</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>amp <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>(<span class="fu">coef</span>(h1)[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>]<span class="sc">^</span><span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-spec" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="section_1_files/figure-html/fig-spec-1.png" class="img-fluid figure-img" width="1400"></p>
+<figcaption class="figure-caption">Figure&nbsp;3: Smoothed periodogram of linearly detrended EAF with 95% confidence limits. The dashed line marks the annual period of 52 weeks.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The strongest peak is at a period of about <strong>48 weeks</strong>, and the 45 to 60 week band holds 30% of the smoothed spectrum. As a cross-check, a single annual harmonic explains 61% of the detrended variation (amplitude 4.0 percentage points, <span class="math inline">p</span> = &lt;0.001). The annual cycle is statistically clear.</p>
+<p><strong>Limitations.</strong> With 232 weeks the frequency resolution is about 0.004 cycles per week, so periods near a year are barely separated from neighbouring cycles. The smoothing that makes the plot readable also widens the peak, and the linear detrending is a choice.</p>
+</section>
+<section id="implementation-1.3-whittle-estimation-from-first-principles" class="level1">
+<h1>Implementation 1.3: Whittle estimation from first principles</h1>
+<p><strong>Aim.</strong> Estimate an ARMA(1,1) model without a time-domain likelihood, using only the periodogram, and compare with Gaussian maximum likelihood.</p>
+<p>For a series with periodogram <span class="math inline">I(\lambda_j)</span> at Fourier frequencies, the Whittle likelihood replaces the exact Gaussian likelihood by</p>
+<p><span class="math display">\ell_W(\phi,\theta,\sigma^2)=-\sum_{j}\left[\log\big(\sigma^2 g(\lambda_j)\big)+\frac{I(\lambda_j)}{\sigma^2 g(\lambda_j)}\right],\qquad g(\lambda)=\frac{|1+\theta e^{-i\lambda}|^2}{|1-\phi e^{-i\lambda}|^2}.</span></p>
+<p>Profiling out <span class="math inline">\sigma^2</span> gives <span class="math inline">\hat\sigma^2=\text{mean}\,(I/g)</span>, and the objective left to minimise over <span class="math inline">(\phi,\theta)</span> is <span class="math inline">\log\hat\sigma^2+\text{mean}\,\log g</span>. I keep the model stationary and invertible with a <span class="math inline">\tanh</span> reparametrisation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Whittle estimates (phi, theta, sigma2) for an ARMA(1,1) from the periodogram</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>whittle_arma11 <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">length</span>(x); x <span class="ot">&lt;-</span> x <span class="sc">-</span> <span class="fu">mean</span>(x)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  j <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">floor</span>((n <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">/</span> <span class="dv">2</span>); lam <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> j <span class="sc">/</span> n                  <span class="co"># Fourier frequencies in (0, pi)</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  I <span class="ot">&lt;-</span> (<span class="fu">Mod</span>(<span class="fu">fft</span>(x))[j <span class="sc">+</span> <span class="dv">1</span>])<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> n                                    <span class="co"># periodogram</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  e <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="sc">-</span>1i <span class="sc">*</span> lam)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  shape <span class="ot">&lt;-</span> <span class="cf">function</span>(ph, th) <span class="fu">Mod</span>(<span class="dv">1</span> <span class="sc">+</span> th <span class="sc">*</span> e)<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> <span class="fu">Mod</span>(<span class="dv">1</span> <span class="sc">-</span> ph <span class="sc">*</span> e)<span class="sc">^</span><span class="dv">2</span>    <span class="co"># spectral shape g</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  obj <span class="ot">&lt;-</span> <span class="cf">function</span>(p) {                                               <span class="co"># profiled Whittle objective</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    g <span class="ot">&lt;-</span> <span class="fu">shape</span>(<span class="fu">tanh</span>(p[<span class="dv">1</span>]), <span class="fu">tanh</span>(p[<span class="dv">2</span>]))</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">log</span>(<span class="fu">mean</span>(I <span class="sc">/</span> g)) <span class="sc">+</span> <span class="fu">mean</span>(<span class="fu">log</span>(g))</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  o <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>), obj, <span class="at">method =</span> <span class="st">"BFGS"</span>)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  ph <span class="ot">&lt;-</span> <span class="fu">tanh</span>(o<span class="sc">$</span>par[<span class="dv">1</span>]); th <span class="ot">&lt;-</span> <span class="fu">tanh</span>(o<span class="sc">$</span>par[<span class="dv">2</span>])</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="at">phi =</span> ph, <span class="at">theta =</span> th, <span class="at">sigma2 =</span> <span class="fu">mean</span>(I <span class="sc">/</span> <span class="fu">shape</span>(ph, th)))</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>w_fit <span class="ot">&lt;-</span> <span class="fu">whittle_arma11</span>(dy)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>m_fit <span class="ot">&lt;-</span> <span class="fu">arima</span>(dy, <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>))                              <span class="co"># exact Gaussian maximum likelihood</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">Method =</span> <span class="fu">c</span>(<span class="st">"Whittle"</span>, <span class="st">"Gaussian MLE"</span>),</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">phi =</span> <span class="fu">c</span>(w_fit[[<span class="st">"phi"</span>]], <span class="fu">coef</span>(m_fit)[[<span class="st">"ar1"</span>]]), <span class="at">theta =</span> <span class="fu">c</span>(w_fit[[<span class="st">"theta"</span>]], <span class="fu">coef</span>(m_fit)[[<span class="st">"ma1"</span>]]),</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">sigma2 =</span> <span class="fu">c</span>(w_fit[[<span class="st">"sigma2"</span>]], m_fit<span class="sc">$</span>sigma2)) <span class="sc">|&gt;</span> <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="tbl-whittle" class="anchored">
+<table class="table table-sm table-striped small">
+<caption>Table&nbsp;3: ARMA(1,1) fitted to the weekly change in EAF by Whittle and by Gaussian maximum likelihood.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Method</th>
+<th style="text-align: right;">phi</th>
+<th style="text-align: right;">theta</th>
+<th style="text-align: right;">sigma2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Whittle</td>
+<td style="text-align: right;">0.512</td>
+<td style="text-align: right;">-0.670</td>
+<td style="text-align: right;">3.792</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Gaussian MLE</td>
+<td style="text-align: right;">0.489</td>
+<td style="text-align: right;">-0.649</td>
+<td style="text-align: right;">3.787</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>The two methods give similar estimates on the real series. A single series cannot show which method is better, so I simulate from a known ARMA(1,1).</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="dv">200</span>; truth <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">phi =</span> <span class="fl">0.7</span>, <span class="at">theta =</span> <span class="fl">0.5</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">map_dfr</span>(<span class="dv">1</span><span class="sc">:</span>R, <span class="cf">function</span>(r) {</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  z <span class="ot">&lt;-</span> <span class="fu">arima.sim</span>(<span class="fu">list</span>(<span class="at">ar =</span> truth[[<span class="st">"phi"</span>]], <span class="at">ma =</span> truth[[<span class="st">"theta"</span>]]), <span class="at">n =</span> <span class="dv">231</span>)   <span class="co"># true ARMA(1,1)</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  w <span class="ot">&lt;-</span> <span class="fu">whittle_arma11</span>(z)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  f <span class="ot">&lt;-</span> <span class="fu">tryCatch</span>(<span class="fu">arima</span>(z, <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>)), <span class="at">error =</span> <span class="cf">function</span>(e) <span class="cn">NULL</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  mle <span class="ot">&lt;-</span> <span class="cf">if</span> (<span class="fu">is.null</span>(f)) <span class="fu">c</span>(<span class="cn">NA_real_</span>, <span class="cn">NA_real_</span>) <span class="cf">else</span> <span class="fu">unname</span>(<span class="fu">coef</span>(f)[<span class="fu">c</span>(<span class="st">"ar1"</span>, <span class="st">"ma1"</span>)])</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="at">method =</span> <span class="fu">c</span>(<span class="st">"Whittle"</span>, <span class="st">"Gaussian MLE"</span>), <span class="at">phi =</span> <span class="fu">c</span>(w[[<span class="st">"phi"</span>]], mle[<span class="dv">1</span>]), <span class="at">theta =</span> <span class="fu">c</span>(w[[<span class="st">"theta"</span>]], mle[<span class="dv">2</span>]))</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>sim <span class="sc">|&gt;</span> <span class="fu">group_by</span>(method) <span class="sc">|&gt;</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">`</span><span class="at">Mean phi</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">mean</span>(phi, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="st">`</span><span class="at">SD phi</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sd</span>(phi, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>            <span class="st">`</span><span class="at">Mean theta</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">mean</span>(theta, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="st">`</span><span class="at">SD theta</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sd</span>(theta, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="tbl-whittle-sim" class="anchored">
+<table class="table table-sm table-striped small">
+<caption>Table&nbsp;4: 200 simulated ARMA(1,1) series of length 231 with phi = 0.7 and theta = 0.5: mean and spread of each estimator.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">method</th>
+<th style="text-align: right;">Mean phi</th>
+<th style="text-align: right;">SD phi</th>
+<th style="text-align: right;">Mean theta</th>
+<th style="text-align: right;">SD theta</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Gaussian MLE</td>
+<td style="text-align: right;">0.689</td>
+<td style="text-align: right;">0.056</td>
+<td style="text-align: right;">0.504</td>
+<td style="text-align: right;">0.065</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Whittle</td>
+<td style="text-align: right;">0.695</td>
+<td style="text-align: right;">0.056</td>
+<td style="text-align: right;">0.484</td>
+<td style="text-align: right;">0.068</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>Both estimators recover φ well (means 0.695 and 0.689 against a true 0.7) with identical spread (SD 0.056). For θ, Whittle is slightly biased downwards (0.484 against a true 0.5, where MLE gives 0.504) and slightly more variable (SD 0.068 against 0.065). Whittle’s cost is therefore a small finite-sample bias in θ, and its benefit is that it needs only one FFT and a two-parameter search.</p>
+<p><strong>Limitations.</strong> The Whittle likelihood is an approximation that improves with sample size, and it treats the periodogram ordinates as independent. It is also awkward when the spectrum has sharp features, because the periodogram is a noisy estimate.</p>
+</section>
+<section id="beyond-the-notes-1.4-long-memory-and-the-gph-estimator" class="level1">
+<h1>Beyond the notes 1.4: Long memory and the GPH estimator</h1>
+<p><strong>Idea.</strong> Differencing assumes a series is either stationary or has a unit root. A fractionally integrated series sits in between, with autocorrelations that decay slowly, and it is common in volatility. The Geweke and Porter-Hudak (GPH) estimator reads the memory parameter <span class="math inline">d</span> from the slope of the log-periodogram against <span class="math inline">\log\{4\sin^2(\lambda_j/2)\}</span> at the lowest frequencies. A value of 0 means short memory, values between 0 and 0.5 mean stationary long memory, and 1 corresponds to a unit root.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># GPH estimate of d from the lowest m Fourier frequencies, with its asymptotic standard error</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>gph <span class="ot">&lt;-</span> <span class="cf">function</span>(x, m) {</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">length</span>(x); x <span class="ot">&lt;-</span> x <span class="sc">-</span> <span class="fu">mean</span>(x); j <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>m; lam <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> j <span class="sc">/</span> n</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  I <span class="ot">&lt;-</span> (<span class="fu">Mod</span>(<span class="fu">fft</span>(x))[j <span class="sc">+</span> <span class="dv">1</span>])<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> n                                    <span class="co"># periodogram</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  reg <span class="ot">&lt;-</span> <span class="fu">log</span>(<span class="dv">4</span> <span class="sc">*</span> <span class="fu">sin</span>(lam <span class="sc">/</span> <span class="dv">2</span>)<span class="sc">^</span><span class="dv">2</span>)                                     <span class="co"># regressor</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">log</span>(I) <span class="sc">~</span> reg)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="at">d =</span> <span class="sc">-</span><span class="fu">coef</span>(fit)[[<span class="st">"reg"</span>]], <span class="at">se =</span> <span class="fu">sqrt</span>(pi<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> <span class="dv">6</span> <span class="sc">/</span> <span class="fu">sum</span>((reg <span class="sc">-</span> <span class="fu">mean</span>(reg))<span class="sc">^</span><span class="dv">2</span>)))</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Weekly absolute returns of Capitec, from Project 4's price file (simple version, no glitch screen)</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>prices <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"../projects/project-04/data/prices.csv"</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">as.Date</span>(date))</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>cap <span class="ot">&lt;-</span> prices <span class="sc">|&gt;</span> <span class="fu">filter</span>(series <span class="sc">==</span> <span class="st">"capitec"</span>) <span class="sc">|&gt;</span> <span class="fu">arrange</span>(date) <span class="sc">|&gt;</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">wk =</span> <span class="fu">floor_date</span>(date, <span class="st">"week"</span>, <span class="at">week_start =</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(wk) <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="at">adj =</span> dplyr<span class="sc">::</span><span class="fu">last</span>(adj), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">r =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="fu">diff</span>(<span class="fu">log</span>(adj)))) <span class="sc">|&gt;</span> <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(wk <span class="sc">&gt;=</span> <span class="fu">as.Date</span>(<span class="st">"2015-01-05"</span>), wk <span class="sc">&lt;=</span> <span class="fu">as.Date</span>(<span class="st">"2026-10-19"</span>))</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>series <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">`</span><span class="at">EAF level</span><span class="st">`</span> <span class="ot">=</span> y, <span class="st">`</span><span class="at">Weekly change in EAF</span><span class="st">`</span> <span class="ot">=</span> dy, <span class="st">`</span><span class="at">Capitec absolute weekly return</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">abs</span>(cap<span class="sc">$</span>r))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map_dfr</span>(<span class="fu">names</span>(series), <span class="cf">function</span>(nm) {</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  z <span class="ot">&lt;-</span> series[[nm]]; n <span class="ot">&lt;-</span> <span class="fu">length</span>(z)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  a <span class="ot">&lt;-</span> <span class="fu">gph</span>(z, <span class="fu">floor</span>(n<span class="sc">^</span><span class="fl">0.5</span>)); b <span class="ot">&lt;-</span> <span class="fu">gph</span>(z, <span class="fu">floor</span>(n<span class="sc">^</span><span class="fl">0.65</span>))</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="at">Series =</span> nm, <span class="at">n =</span> n, <span class="st">`</span><span class="at">d (m = n^0.5)</span><span class="st">`</span> <span class="ot">=</span> a[[<span class="st">"d"</span>]], <span class="st">`</span><span class="at">se 1</span><span class="st">`</span> <span class="ot">=</span> a[[<span class="st">"se"</span>]], <span class="st">`</span><span class="at">d (m = n^0.65)</span><span class="st">`</span> <span class="ot">=</span> b[[<span class="st">"d"</span>]], <span class="st">`</span><span class="at">se 2</span><span class="st">`</span> <span class="ot">=</span> b[[<span class="st">"se"</span>]])</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>}) <span class="sc">|&gt;</span> <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="tbl-gph" class="anchored">
+<table class="table table-sm table-striped small">
+<caption>Table&nbsp;5: GPH estimates of the memory parameter d at two bandwidths (m = n^0.5 and n^0.65), with asymptotic standard errors.</caption>
+<colgroup>
+<col style="width: 41%">
+<col style="width: 5%">
+<col style="width: 18%">
+<col style="width: 6%">
+<col style="width: 20%">
+<col style="width: 6%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Series</th>
+<th style="text-align: right;">n</th>
+<th style="text-align: right;">d (m = n^0.5)</th>
+<th style="text-align: right;">se 1</th>
+<th style="text-align: right;">d (m = n^0.65)</th>
+<th style="text-align: right;">se 2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">EAF level</td>
+<td style="text-align: right;">232</td>
+<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">0.22</td>
+<td style="text-align: right;">0.89</td>
+<td style="text-align: right;">0.13</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Weekly change in EAF</td>
+<td style="text-align: right;">231</td>
+<td style="text-align: right;">-0.51</td>
+<td style="text-align: right;">0.22</td>
+<td style="text-align: right;">-0.28</td>
+<td style="text-align: right;">0.13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Capitec absolute weekly return</td>
+<td style="text-align: right;">616</td>
+<td style="text-align: right;">0.08</td>
+<td style="text-align: right;">0.16</td>
+<td style="text-align: right;">0.22</td>
+<td style="text-align: right;">0.09</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>The EAF level has d close to 1 (0.99 and 0.89), consistent with a unit root and with the decision to difference. The weekly change is not near 0: d is −0.51 at m = n^0.5 and −0.28 at m = n^0.65, both more than two standard errors below zero. This suggests the differenced series is over-differenced or anti-persistent, not that it has long memory. Capitec’s absolute return falls between 0 and 0.5 at both bandwidths (0.08 and 0.22), but only the wider bandwidth distinguishes it from 0 (0.22 with se 0.09), so the evidence for volatility persistence depends on the bandwidth. The estimates move noticeably with m, so I read them as rough indications and not as precise values.</p>
+<p><strong>Limitations.</strong> GPH is biased when there is short-memory structure, is sensitive to the bandwidth, and is imprecise in samples of a few hundred observations. The asymptotic theory is for stationary series, so the EAF level is a rough check only. This ties to Project 1, where GARCH captures volatility persistence with a different mechanism.</p>
+</section>
+<section id="reflection" class="level1">
+<h1>Reflection</h1>
+<ul>
+<li><p><em>Whittle:</em> “the Whittle simulation showed almost the same spread as maximum likelihood and only a small downward bias in θ (0.484 against 0.5), which is a fair price for a method that needs one FFT”</p></li>
+<li><p><strong>Long memory:</strong> “moved with the bandwidth (for the weekly change in EAF, from −0.51 to −0.28), so I treat them as indicative, with wide standard errors, not as point facts”</p></li>
+<li><p><strong>ARIMA:</strong> “did not beat the naive benchmark on the 26-week hold-out (RMSE 4.02 against 3.59), though its 80% and 95% intervals both contained 96% of actuals, so the 80% intervals were wider than needed”</p></li>
+</ul>
+<p>Journal entries for this section are in the <a href="../journal/index.html">journal</a>, and my AI use is declared in the <a href="../appendix/ai_use_log.html">AI Use Log</a>.</p>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb12" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Section 1: ARIMA, Volatility and Spectral Analysis"</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Worked tutorials, an implementation from first principles, and one idea beyond the notes"</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="an">toc:</span><span class="co"> true</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="an">toc-depth:</span><span class="co"> 2</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="an">number-sections:</span><span class="co"> false</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co">    fig-width: 7</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co">    fig-height: 3.8</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="co">    fig-dpi: 200</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co">    fig-align: center</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: setup</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="co">#| cache: false</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a><span class="co">#| include: false</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- Packages ----</span></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)   <span class="co"># wrangling and ggplot2</span></span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)   <span class="co"># week arithmetic</span></span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)       <span class="co"># kable tables</span></span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tseries)     <span class="co"># ADF and KPSS tests</span></span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2026</span>)                                                           <span class="co"># reproducible simulations</span></span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- One look for every figure ----</span></span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>pal <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">ink =</span> <span class="st">"#111111"</span>, <span class="at">blue =</span> <span class="st">"#1a5fd0"</span>, <span class="at">grey =</span> <span class="st">"#8a94a6"</span>, <span class="at">light =</span> <span class="st">"#e6e9ef"</span>)</span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>theme_ts <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">base =</span> <span class="dv">11</span>) {</span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> base) <span class="sc">%+replace%</span></span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(</span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>      <span class="at">plot.title    =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">b =</span> <span class="dv">4</span>)),</span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a>      <span class="at">panel.grid.minor   =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>      <span class="at">panel.grid.major.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a>      <span class="at">panel.grid.major.y =</span> <span class="fu">element_line</span>(<span class="at">colour =</span> pal[[<span class="st">"light"</span>]], <span class="at">linewidth =</span> <span class="fl">0.3</span>),</span>
+<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a>      <span class="at">axis.text  =</span> <span class="fu">element_text</span>(<span class="at">colour =</span> <span class="st">"grey30"</span>),</span>
+<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a>      <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">colour =</span> <span class="st">"grey30"</span>),</span>
+<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a>      <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">hjust =</span> <span class="dv">0</span>),</span>
+<span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a>      <span class="at">legend.position =</span> <span class="st">"top"</span>, <span class="at">legend.justification =</span> <span class="st">"left"</span>,</span>
+<span id="cb12-43"><a href="#cb12-43" aria-hidden="true" tabindex="-1"></a>      <span class="at">plot.margin =</span> <span class="fu">margin</span>(<span class="dv">6</span>, <span class="dv">10</span>, <span class="dv">6</span>, <span class="dv">6</span>))</span>
+<span id="cb12-44"><a href="#cb12-44" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-45"><a href="#cb12-45" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_ts</span>())</span>
+<span id="cb12-46"><a href="#cb12-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-47"><a href="#cb12-47" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- Data: weekly Eskom EAF (from Project 2) ----</span></span>
+<span id="cb12-48"><a href="#cb12-48" aria-hidden="true" tabindex="-1"></a>eaf <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"../projects/project-02/data/eaf.csv"</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb12-49"><a href="#cb12-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">as.Date</span>(date)) <span class="sc">|&gt;</span> <span class="fu">arrange</span>(date)</span>
+<span id="cb12-50"><a href="#cb12-50" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="fu">all</span>(<span class="fu">as.numeric</span>(<span class="fu">diff</span>(eaf<span class="sc">$</span>date)) <span class="sc">==</span> <span class="dv">7</span>))          <span class="co"># regular weekly spacing</span></span>
+<span id="cb12-51"><a href="#cb12-51" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> eaf<span class="sc">$</span>eaf; n <span class="ot">&lt;-</span> <span class="fu">length</span>(y); dy <span class="ot">&lt;-</span> <span class="fu">diff</span>(y)               <span class="co"># level and weekly change</span></span>
+<span id="cb12-52"><a href="#cb12-52" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-53"><a href="#cb12-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-54"><a href="#cb12-54" aria-hidden="true" tabindex="-1"></a><span class="fu"># Overview</span></span>
+<span id="cb12-55"><a href="#cb12-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-56"><a href="#cb12-56" aria-hidden="true" tabindex="-1"></a>This section covers the classical toolkit: ARIMA models, ARCH and GARCH models for changing variance, and spectral analysis. They all describe the same thing, the autocovariance structure of a series. ARIMA summarises it with a few parameters, GARCH models the variance that is left over, and the spectrum shows the same information by cycle length.</span>
+<span id="cb12-57"><a href="#cb12-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-58"><a href="#cb12-58" aria-hidden="true" tabindex="-1"></a>I applied these ideas mainly in Project 1 (a GARCH model with a search-interest regressor) and Project 2 (cross-spectral coherence). The tutorials here add three things: ARIMA forecasting and the periodogram on Eskom's EAF, a Whittle estimator that I coded myself and tested against maximum likelihood, and a look at long memory with the GPH estimator.</span>
+<span id="cb12-59"><a href="#cb12-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-60"><a href="#cb12-60" aria-hidden="true" tabindex="-1"></a>| Topic | Where it appears |</span>
+<span id="cb12-61"><a href="#cb12-61" aria-hidden="true" tabindex="-1"></a>|---|---|</span>
+<span id="cb12-62"><a href="#cb12-62" aria-hidden="true" tabindex="-1"></a>| AR, MA, ARMA, ARIMA | Tutorial 1.1 |</span>
+<span id="cb12-63"><a href="#cb12-63" aria-hidden="true" tabindex="-1"></a>| ARCH and GARCH | <span class="co">[</span><span class="ot">Project 1</span><span class="co">](../projects/project-01/index.html)</span> |</span>
+<span id="cb12-64"><a href="#cb12-64" aria-hidden="true" tabindex="-1"></a>| Spectral analysis and filtering | <span class="co">[</span><span class="ot">Project 2</span><span class="co">](../projects/project-02/index.html)</span>, Tutorial 1.2 |</span>
+<span id="cb12-65"><a href="#cb12-65" aria-hidden="true" tabindex="-1"></a>| Whittle estimation | Implementation 1.3 |</span>
+<span id="cb12-66"><a href="#cb12-66" aria-hidden="true" tabindex="-1"></a>| Long memory | Beyond the notes 1.4 |</span>
+<span id="cb12-67"><a href="#cb12-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-68"><a href="#cb12-68" aria-hidden="true" tabindex="-1"></a>All tutorials use the weekly Eskom Energy Availability Factor (EAF) built for Project 2, which has <span class="in">`r n`</span> weeks from <span class="in">`r format(min(eaf$date), "%b %Y")`</span> to <span class="in">`r format(max(eaf$date), "%b %Y")`</span>.</span>
+<span id="cb12-69"><a href="#cb12-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-70"><a href="#cb12-70" aria-hidden="true" tabindex="-1"></a><span class="fu"># Tutorial 1.1: ARIMA forecasting of Eskom EAF</span></span>
+<span id="cb12-71"><a href="#cb12-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-72"><a href="#cb12-72" aria-hidden="true" tabindex="-1"></a>**Aim.** Fit an ARIMA model to weekly EAF by the Box-Jenkins steps, forecast 26 weeks ahead with prediction intervals, and judge the forecasts on a hold-out.</span>
+<span id="cb12-73"><a href="#cb12-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-76"><a href="#cb12-76" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-77"><a href="#cb12-77" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-stationarity</span></span>
+<span id="cb12-78"><a href="#cb12-78" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "Unit-root and stationarity tests. ADF null: unit root. KPSS null: stationary around a trend (level) or constant (change)."</span></span>
+<span id="cb12-79"><a href="#cb12-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-80"><a href="#cb12-80" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">Series =</span> <span class="fu">c</span>(<span class="st">"EAF level"</span>, <span class="st">"Weekly change in EAF"</span>),</span>
+<span id="cb12-81"><a href="#cb12-81" aria-hidden="true" tabindex="-1"></a>       <span class="st">`</span><span class="at">ADF p</span><span class="st">`</span>  <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">suppressWarnings</span>(<span class="fu">adf.test</span>(y)<span class="sc">$</span>p.value), <span class="fu">suppressWarnings</span>(<span class="fu">adf.test</span>(dy)<span class="sc">$</span>p.value)),</span>
+<span id="cb12-82"><a href="#cb12-82" aria-hidden="true" tabindex="-1"></a>       <span class="st">`</span><span class="at">KPSS p</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">suppressWarnings</span>(<span class="fu">kpss.test</span>(y, <span class="at">null =</span> <span class="st">"Trend"</span>)<span class="sc">$</span>p.value),</span>
+<span id="cb12-83"><a href="#cb12-83" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">suppressWarnings</span>(<span class="fu">kpss.test</span>(dy, <span class="at">null =</span> <span class="st">"Level"</span>)<span class="sc">$</span>p.value))) <span class="sc">|&gt;</span> <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>)</span>
+<span id="cb12-84"><a href="#cb12-84" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-85"><a href="#cb12-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-88"><a href="#cb12-88" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-89"><a href="#cb12-89" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-cf</span></span>
+<span id="cb12-90"><a href="#cb12-90" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "Autocorrelation and partial autocorrelation of the weekly change in EAF. Dashed lines are approximate 95% bounds."</span></span>
+<span id="cb12-91"><a href="#cb12-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-92"><a href="#cb12-92" aria-hidden="true" tabindex="-1"></a><span class="co"># ACF and PACF in one data frame (lag 0 dropped from the ACF)</span></span>
+<span id="cb12-93"><a href="#cb12-93" aria-hidden="true" tabindex="-1"></a>cf_df <span class="ot">&lt;-</span> <span class="cf">function</span>(z, <span class="at">lag.max =</span> <span class="dv">26</span>) {</span>
+<span id="cb12-94"><a href="#cb12-94" aria-hidden="true" tabindex="-1"></a>  a <span class="ot">&lt;-</span> <span class="fu">acf</span>(z, <span class="at">lag.max =</span> lag.max, <span class="at">plot =</span> <span class="cn">FALSE</span>); p <span class="ot">&lt;-</span> <span class="fu">pacf</span>(z, <span class="at">lag.max =</span> lag.max, <span class="at">plot =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb12-95"><a href="#cb12-95" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(<span class="fu">tibble</span>(<span class="at">type =</span> <span class="st">"ACF"</span>,  <span class="at">lag =</span> <span class="fu">as.numeric</span>(a<span class="sc">$</span>lag)[<span class="sc">-</span><span class="dv">1</span>], <span class="at">r =</span> <span class="fu">as.numeric</span>(a<span class="sc">$</span>acf)[<span class="sc">-</span><span class="dv">1</span>]),</span>
+<span id="cb12-96"><a href="#cb12-96" aria-hidden="true" tabindex="-1"></a>            <span class="fu">tibble</span>(<span class="at">type =</span> <span class="st">"PACF"</span>, <span class="at">lag =</span> <span class="fu">as.numeric</span>(p<span class="sc">$</span>lag),     <span class="at">r =</span> <span class="fu">as.numeric</span>(p<span class="sc">$</span>acf)))</span>
+<span id="cb12-97"><a href="#cb12-97" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-98"><a href="#cb12-98" aria-hidden="true" tabindex="-1"></a><span class="fu">cf_df</span>(dy) <span class="sc">|&gt;</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(lag, r)) <span class="sc">+</span></span>
+<span id="cb12-99"><a href="#cb12-99" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>) <span class="sc">*</span> <span class="fl">1.96</span> <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="fu">length</span>(dy)), <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">colour =</span> pal[[<span class="st">"grey"</span>]]) <span class="sc">+</span></span>
+<span id="cb12-100"><a href="#cb12-100" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">xend =</span> lag, <span class="at">yend =</span> <span class="dv">0</span>), <span class="at">colour =</span> pal[[<span class="st">"ink"</span>]], <span class="at">linewidth =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb12-101"><a href="#cb12-101" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>type) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Lag (weeks)"</span>, <span class="at">y =</span> <span class="cn">NULL</span>)</span>
+<span id="cb12-102"><a href="#cb12-102" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-103"><a href="#cb12-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-104"><a href="#cb12-104" aria-hidden="true" tabindex="-1"></a>The level is non-stationary and the weekly change is stationary, so I difference once ($d=1$). I hold out the last 26 weeks, choose $(p,q)$ on the training data by AIC over a small grid, and check the residuals.</span>
+<span id="cb12-105"><a href="#cb12-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-108"><a href="#cb12-108" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-109"><a href="#cb12-109" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: arima-fit</span></span>
+<span id="cb12-110"><a href="#cb12-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-111"><a href="#cb12-111" aria-hidden="true" tabindex="-1"></a>hold <span class="ot">&lt;-</span> <span class="dv">26</span></span>
+<span id="cb12-112"><a href="#cb12-112" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> y[<span class="dv">1</span><span class="sc">:</span>(n <span class="sc">-</span> hold)]; test <span class="ot">&lt;-</span> y[(n <span class="sc">-</span> hold <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span>n]               <span class="co"># training set and 26-week hold-out</span></span>
+<span id="cb12-113"><a href="#cb12-113" aria-hidden="true" tabindex="-1"></a>grid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">p =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">q =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">3</span>)                               <span class="co"># candidate orders, d = 1 throughout</span></span>
+<span id="cb12-114"><a href="#cb12-114" aria-hidden="true" tabindex="-1"></a>cand <span class="ot">&lt;-</span> <span class="fu">pmap_dfr</span>(grid, <span class="cf">function</span>(p, q) {</span>
+<span id="cb12-115"><a href="#cb12-115" aria-hidden="true" tabindex="-1"></a>  f <span class="ot">&lt;-</span> <span class="fu">tryCatch</span>(<span class="fu">arima</span>(train, <span class="at">order =</span> <span class="fu">c</span>(p, <span class="dv">1</span>, q)), <span class="at">error =</span> <span class="cf">function</span>(e) <span class="cn">NULL</span>)</span>
+<span id="cb12-116"><a href="#cb12-116" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(f)) <span class="fu">return</span>(<span class="cn">NULL</span>)</span>
+<span id="cb12-117"><a href="#cb12-117" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="at">p =</span> p, <span class="at">q =</span> q, <span class="at">AIC =</span> <span class="fu">AIC</span>(f), <span class="at">BIC =</span> <span class="fu">BIC</span>(f))</span>
+<span id="cb12-118"><a href="#cb12-118" aria-hidden="true" tabindex="-1"></a>}) <span class="sc">|&gt;</span> <span class="fu">arrange</span>(AIC)</span>
+<span id="cb12-119"><a href="#cb12-119" aria-hidden="true" tabindex="-1"></a>best <span class="ot">&lt;-</span> cand[<span class="dv">1</span>, ]</span>
+<span id="cb12-120"><a href="#cb12-120" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">arima</span>(train, <span class="at">order =</span> <span class="fu">c</span>(best<span class="sc">$</span>p, <span class="dv">1</span>, best<span class="sc">$</span>q))</span>
+<span id="cb12-121"><a href="#cb12-121" aria-hidden="true" tabindex="-1"></a>lb  <span class="ot">&lt;-</span> <span class="fu">Box.test</span>(<span class="fu">residuals</span>(fit), <span class="at">lag =</span> <span class="dv">13</span>, <span class="at">type =</span> <span class="st">"Ljung-Box"</span>, <span class="at">fitdf =</span> best<span class="sc">$</span>p <span class="sc">+</span> best<span class="sc">$</span>q)<span class="sc">$</span>p.value</span>
+<span id="cb12-122"><a href="#cb12-122" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-123"><a href="#cb12-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-126"><a href="#cb12-126" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-127"><a href="#cb12-127" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-cand</span></span>
+<span id="cb12-128"><a href="#cb12-128" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "The five best ARIMA(p,1,q) models on the training data."</span></span>
+<span id="cb12-129"><a href="#cb12-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-130"><a href="#cb12-130" aria-hidden="true" tabindex="-1"></a>cand <span class="sc">|&gt;</span> <span class="fu">head</span>(<span class="dv">5</span>) <span class="sc">|&gt;</span> <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">1</span>)</span>
+<span id="cb12-131"><a href="#cb12-131" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-132"><a href="#cb12-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-133"><a href="#cb12-133" aria-hidden="true" tabindex="-1"></a>The selected model is **ARIMA(`r best$p`,1,`r best$q`)**, and the Ljung-Box test on its residuals gives $p$ = <span class="in">`r sprintf("%.3f", lb)`</span>, so <span class="in">`r ifelse(lb &gt; 0.05, "there is no evidence of leftover autocorrelation", "some autocorrelation remains in the residuals")`</span>.</span>
+<span id="cb12-134"><a href="#cb12-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-137"><a href="#cb12-137" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-138"><a href="#cb12-138" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-arima-fc</span></span>
+<span id="cb12-139"><a href="#cb12-139" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "26-week hold-out forecast of EAF with 80% and 95% prediction intervals. Points are the actual values."</span></span>
+<span id="cb12-140"><a href="#cb12-140" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-141"><a href="#cb12-141" aria-hidden="true" tabindex="-1"></a>pr <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">n.ahead =</span> hold)</span>
+<span id="cb12-142"><a href="#cb12-142" aria-hidden="true" tabindex="-1"></a>fc <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">date =</span> eaf<span class="sc">$</span>date[(n <span class="sc">-</span> hold <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span>n], <span class="at">fit_mean =</span> <span class="fu">as.numeric</span>(pr<span class="sc">$</span>pred), <span class="at">se =</span> <span class="fu">as.numeric</span>(pr<span class="sc">$</span>se),</span>
+<span id="cb12-143"><a href="#cb12-143" aria-hidden="true" tabindex="-1"></a>             <span class="at">l80 =</span> fit_mean <span class="sc">-</span> <span class="fu">qnorm</span>(<span class="fl">0.90</span>) <span class="sc">*</span> se, <span class="at">u80 =</span> fit_mean <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fl">0.90</span>) <span class="sc">*</span> se,</span>
+<span id="cb12-144"><a href="#cb12-144" aria-hidden="true" tabindex="-1"></a>             <span class="at">l95 =</span> fit_mean <span class="sc">-</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>) <span class="sc">*</span> se, <span class="at">u95 =</span> fit_mean <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>) <span class="sc">*</span> se, <span class="at">actual =</span> test)</span>
+<span id="cb12-145"><a href="#cb12-145" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb12-146"><a href="#cb12-146" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> <span class="fu">tibble</span>(<span class="at">date =</span> eaf<span class="sc">$</span>date[<span class="dv">1</span><span class="sc">:</span>(n <span class="sc">-</span> hold)], <span class="at">v =</span> train) <span class="sc">|&gt;</span> <span class="fu">tail</span>(<span class="dv">60</span>), <span class="fu">aes</span>(date, v), <span class="at">colour =</span> pal[[<span class="st">"ink"</span>]]) <span class="sc">+</span></span>
+<span id="cb12-147"><a href="#cb12-147" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">data =</span> fc, <span class="fu">aes</span>(date, <span class="at">ymin =</span> l95, <span class="at">ymax =</span> u95), <span class="at">fill =</span> pal[[<span class="st">"blue"</span>]], <span class="at">alpha =</span> <span class="fl">0.12</span>) <span class="sc">+</span></span>
+<span id="cb12-148"><a href="#cb12-148" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">data =</span> fc, <span class="fu">aes</span>(date, <span class="at">ymin =</span> l80, <span class="at">ymax =</span> u80), <span class="at">fill =</span> pal[[<span class="st">"blue"</span>]], <span class="at">alpha =</span> <span class="fl">0.22</span>) <span class="sc">+</span></span>
+<span id="cb12-149"><a href="#cb12-149" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> fc, <span class="fu">aes</span>(date, fit_mean), <span class="at">colour =</span> pal[[<span class="st">"blue"</span>]], <span class="at">linewidth =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb12-150"><a href="#cb12-150" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> fc, <span class="fu">aes</span>(date, actual), <span class="at">colour =</span> pal[[<span class="st">"ink"</span>]], <span class="at">size =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb12-151"><a href="#cb12-151" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"EAF (%)"</span>)</span>
+<span id="cb12-152"><a href="#cb12-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-153"><a href="#cb12-153" aria-hidden="true" tabindex="-1"></a>rmse_arima <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((test <span class="sc">-</span> fc<span class="sc">$</span>fit_mean)<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb12-154"><a href="#cb12-154" aria-hidden="true" tabindex="-1"></a>rmse_naive <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((test <span class="sc">-</span> <span class="fu">tail</span>(train, <span class="dv">1</span>))<span class="sc">^</span><span class="dv">2</span>))                 <span class="co"># naive: repeat the last observation</span></span>
+<span id="cb12-155"><a href="#cb12-155" aria-hidden="true" tabindex="-1"></a>cov80 <span class="ot">&lt;-</span> <span class="fu">mean</span>(test <span class="sc">&gt;=</span> fc<span class="sc">$</span>l80 <span class="sc">&amp;</span> test <span class="sc">&lt;=</span> fc<span class="sc">$</span>u80); cov95 <span class="ot">&lt;-</span> <span class="fu">mean</span>(test <span class="sc">&gt;=</span> fc<span class="sc">$</span>l95 <span class="sc">&amp;</span> test <span class="sc">&lt;=</span> fc<span class="sc">$</span>u95)</span>
+<span id="cb12-156"><a href="#cb12-156" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-157"><a href="#cb12-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-158"><a href="#cb12-158" aria-hidden="true" tabindex="-1"></a>On the 26-week hold-out the ARIMA forecast has an RMSE of <span class="in">`r sprintf("%.2f", rmse_arima)`</span> against <span class="in">`r sprintf("%.2f", rmse_naive)`</span> for the naive forecast (repeat the last value). The 80% and 95% intervals contain <span class="in">`r sprintf("%.0f%%", 100 * cov80)`</span> and <span class="in">`r sprintf("%.0f%%", 100 * cov95)`</span> of the actual values. <span class="in">`r ifelse(rmse_arima &lt; rmse_naive, "The model beats the naive benchmark.", "The model does not beat the naive benchmark, which is a useful warning about how little weekly structure there is.")`</span></span>
+<span id="cb12-159"><a href="#cb12-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-160"><a href="#cb12-160" aria-hidden="true" tabindex="-1"></a>**Limitations.** This is a non-seasonal model, but EAF has an annual cycle (planned outages are lower in winter). A seasonal ARIMA with period 52 needs far more than 232 weekly observations, so Section 2 handles seasonality with harmonic regression instead. Prediction intervals assume Gaussian, constant-variance errors, which weekly EAF may not satisfy.</span>
+<span id="cb12-161"><a href="#cb12-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-162"><a href="#cb12-162" aria-hidden="true" tabindex="-1"></a><span class="fu"># Tutorial 1.2: The periodogram of EAF</span></span>
+<span id="cb12-163"><a href="#cb12-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-164"><a href="#cb12-164" aria-hidden="true" tabindex="-1"></a>**Aim.** Look at EAF in the frequency domain and test whether the annual cycle shows up.</span>
+<span id="cb12-165"><a href="#cb12-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-168"><a href="#cb12-168" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-169"><a href="#cb12-169" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-spec</span></span>
+<span id="cb12-170"><a href="#cb12-170" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "Smoothed periodogram of linearly detrended EAF with 95% confidence limits. The dashed line marks the annual period of 52 weeks."</span></span>
+<span id="cb12-171"><a href="#cb12-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-172"><a href="#cb12-172" aria-hidden="true" tabindex="-1"></a>xd <span class="ot">&lt;-</span> <span class="fu">resid</span>(<span class="fu">lm</span>(y <span class="sc">~</span> <span class="fu">seq_along</span>(y)))                                   <span class="co"># remove the linear trend</span></span>
+<span id="cb12-173"><a href="#cb12-173" aria-hidden="true" tabindex="-1"></a>sp <span class="ot">&lt;-</span> <span class="fu">spec.pgram</span>(xd, <span class="at">spans =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">5</span>), <span class="at">taper =</span> <span class="fl">0.1</span>, <span class="at">detrend =</span> <span class="cn">FALSE</span>, <span class="at">demean =</span> <span class="cn">TRUE</span>, <span class="at">plot =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb12-174"><a href="#cb12-174" aria-hidden="true" tabindex="-1"></a>spec_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">freq =</span> sp<span class="sc">$</span>freq, <span class="at">spec =</span> sp<span class="sc">$</span>spec,</span>
+<span id="cb12-175"><a href="#cb12-175" aria-hidden="true" tabindex="-1"></a>                  <span class="at">lo =</span> sp<span class="sc">$</span>spec <span class="sc">*</span> sp<span class="sc">$</span>df <span class="sc">/</span> <span class="fu">qchisq</span>(<span class="fl">0.975</span>, sp<span class="sc">$</span>df),      <span class="co"># 95% limits from the chi-square distribution</span></span>
+<span id="cb12-176"><a href="#cb12-176" aria-hidden="true" tabindex="-1"></a>                  <span class="at">hi =</span> sp<span class="sc">$</span>spec <span class="sc">*</span> sp<span class="sc">$</span>df <span class="sc">/</span> <span class="fu">qchisq</span>(<span class="fl">0.025</span>, sp<span class="sc">$</span>df))</span>
+<span id="cb12-177"><a href="#cb12-177" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(spec_df, <span class="fu">aes</span>(freq)) <span class="sc">+</span></span>
+<span id="cb12-178"><a href="#cb12-178" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> lo, <span class="at">ymax =</span> hi), <span class="at">fill =</span> pal[[<span class="st">"blue"</span>]], <span class="at">alpha =</span> <span class="fl">0.15</span>) <span class="sc">+</span></span>
+<span id="cb12-179"><a href="#cb12-179" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> spec), <span class="at">colour =</span> pal[[<span class="st">"blue"</span>]], <span class="at">linewidth =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb12-180"><a href="#cb12-180" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">1</span> <span class="sc">/</span> <span class="fl">52.18</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">colour =</span> pal[[<span class="st">"ink"</span>]]) <span class="sc">+</span></span>
+<span id="cb12-181"><a href="#cb12-181" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>() <span class="sc">+</span></span>
+<span id="cb12-182"><a href="#cb12-182" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="dv">1</span> <span class="sc">/</span> <span class="fu">c</span>(<span class="dv">104</span>, <span class="dv">52</span>, <span class="dv">26</span>, <span class="dv">13</span>, <span class="dv">8</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"104"</span>, <span class="st">"52"</span>, <span class="st">"26"</span>, <span class="st">"13"</span>, <span class="st">"8"</span>), <span class="at">name =</span> <span class="st">"Period (weeks)"</span>) <span class="sc">+</span></span>
+<span id="cb12-183"><a href="#cb12-183" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"Smoothed spectrum"</span>)</span>
+<span id="cb12-184"><a href="#cb12-184" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-185"><a href="#cb12-185" aria-hidden="true" tabindex="-1"></a>f_pk <span class="ot">&lt;-</span> sp<span class="sc">$</span>freq[<span class="fu">which.max</span>(sp<span class="sc">$</span>spec)]</span>
+<span id="cb12-186"><a href="#cb12-186" aria-hidden="true" tabindex="-1"></a>band <span class="ot">&lt;-</span> sp<span class="sc">$</span>freq <span class="sc">&gt;=</span> <span class="dv">1</span> <span class="sc">/</span> <span class="dv">60</span> <span class="sc">&amp;</span> sp<span class="sc">$</span>freq <span class="sc">&lt;=</span> <span class="dv">1</span> <span class="sc">/</span> <span class="dv">45</span>                       <span class="co"># periods of 45 to 60 weeks</span></span>
+<span id="cb12-187"><a href="#cb12-187" aria-hidden="true" tabindex="-1"></a>share <span class="ot">&lt;-</span> <span class="fu">sum</span>(sp<span class="sc">$</span>spec[band]) <span class="sc">/</span> <span class="fu">sum</span>(sp<span class="sc">$</span>spec)</span>
+<span id="cb12-188"><a href="#cb12-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-189"><a href="#cb12-189" aria-hidden="true" tabindex="-1"></a><span class="co"># Cross-check: regress on one annual harmonic and test it</span></span>
+<span id="cb12-190"><a href="#cb12-190" aria-hidden="true" tabindex="-1"></a>tt <span class="ot">&lt;-</span> <span class="fu">seq_along</span>(y); w <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">/</span> <span class="fl">52.18</span></span>
+<span id="cb12-191"><a href="#cb12-191" aria-hidden="true" tabindex="-1"></a>h1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(xd <span class="sc">~</span> <span class="fu">sin</span>(w <span class="sc">*</span> tt) <span class="sc">+</span> <span class="fu">cos</span>(w <span class="sc">*</span> tt))</span>
+<span id="cb12-192"><a href="#cb12-192" aria-hidden="true" tabindex="-1"></a>r2 <span class="ot">&lt;-</span> <span class="fu">summary</span>(h1)<span class="sc">$</span>r.squared; p_h <span class="ot">&lt;-</span> <span class="fu">anova</span>(<span class="fu">lm</span>(xd <span class="sc">~</span> <span class="dv">1</span>), h1)<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">2</span>]</span>
+<span id="cb12-193"><a href="#cb12-193" aria-hidden="true" tabindex="-1"></a>amp <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>(<span class="fu">coef</span>(h1)[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>]<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb12-194"><a href="#cb12-194" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-195"><a href="#cb12-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-196"><a href="#cb12-196" aria-hidden="true" tabindex="-1"></a>The strongest peak is at a period of about **`r sprintf("%.0f", 1 / f_pk)` weeks**, and the 45 to 60 week band holds <span class="in">`r sprintf("%.0f%%", 100 * share)`</span> of the smoothed spectrum. As a cross-check, a single annual harmonic explains <span class="in">`r sprintf("%.0f%%", 100 * r2)`</span> of the detrended variation (amplitude <span class="in">`r sprintf("%.1f", amp)`</span> percentage points, $p$ = <span class="in">`r ifelse(p_h &lt; 0.001, "&lt;0.001", sprintf("%.3f", p_h))`</span>). <span class="in">`r ifelse(p_h &lt; 0.05, "The annual cycle is statistically clear.", "The annual cycle is not statistically clear in this short sample.")`</span></span>
+<span id="cb12-197"><a href="#cb12-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-198"><a href="#cb12-198" aria-hidden="true" tabindex="-1"></a>**Limitations.** With 232 weeks the frequency resolution is about 0.004 cycles per week, so periods near a year are barely separated from neighbouring cycles. The smoothing that makes the plot readable also widens the peak, and the linear detrending is a choice.</span>
+<span id="cb12-199"><a href="#cb12-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-200"><a href="#cb12-200" aria-hidden="true" tabindex="-1"></a><span class="fu"># Implementation 1.3: Whittle estimation from first principles</span></span>
+<span id="cb12-201"><a href="#cb12-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-202"><a href="#cb12-202" aria-hidden="true" tabindex="-1"></a>**Aim.** Estimate an ARMA(1,1) model without a time-domain likelihood, using only the periodogram, and compare with Gaussian maximum likelihood.</span>
+<span id="cb12-203"><a href="#cb12-203" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-204"><a href="#cb12-204" aria-hidden="true" tabindex="-1"></a>For a series with periodogram $I(\lambda_j)$ at Fourier frequencies, the Whittle likelihood replaces the exact Gaussian likelihood by</span>
+<span id="cb12-205"><a href="#cb12-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-206"><a href="#cb12-206" aria-hidden="true" tabindex="-1"></a>$$\ell_W(\phi,\theta,\sigma^2)=-\sum_{j}\left<span class="co">[</span><span class="ot">\log\big(\sigma^2 g(\lambda_j)\big)+\frac{I(\lambda_j)}{\sigma^2 g(\lambda_j)}\right</span><span class="co">]</span>,\qquad g(\lambda)=\frac{|1+\theta e^{-i\lambda}|^2}{|1-\phi e^{-i\lambda}|^2}.$$</span>
+<span id="cb12-207"><a href="#cb12-207" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-208"><a href="#cb12-208" aria-hidden="true" tabindex="-1"></a>Profiling out $\sigma^2$ gives $\hat\sigma^2=\text{mean}\,(I/g)$, and the objective left to minimise over $(\phi,\theta)$ is $\log\hat\sigma^2+\text{mean}\,\log g$. I keep the model stationary and invertible with a $\tanh$ reparametrisation.</span>
+<span id="cb12-209"><a href="#cb12-209" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-212"><a href="#cb12-212" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-213"><a href="#cb12-213" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: whittle</span></span>
+<span id="cb12-214"><a href="#cb12-214" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb12-215"><a href="#cb12-215" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-summary: "Whittle estimator for ARMA(1,1)"</span></span>
+<span id="cb12-216"><a href="#cb12-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-217"><a href="#cb12-217" aria-hidden="true" tabindex="-1"></a><span class="co"># Whittle estimates (phi, theta, sigma2) for an ARMA(1,1) from the periodogram</span></span>
+<span id="cb12-218"><a href="#cb12-218" aria-hidden="true" tabindex="-1"></a>whittle_arma11 <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb12-219"><a href="#cb12-219" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">length</span>(x); x <span class="ot">&lt;-</span> x <span class="sc">-</span> <span class="fu">mean</span>(x)</span>
+<span id="cb12-220"><a href="#cb12-220" aria-hidden="true" tabindex="-1"></a>  j <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">floor</span>((n <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">/</span> <span class="dv">2</span>); lam <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> j <span class="sc">/</span> n                  <span class="co"># Fourier frequencies in (0, pi)</span></span>
+<span id="cb12-221"><a href="#cb12-221" aria-hidden="true" tabindex="-1"></a>  I <span class="ot">&lt;-</span> (<span class="fu">Mod</span>(<span class="fu">fft</span>(x))[j <span class="sc">+</span> <span class="dv">1</span>])<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> n                                    <span class="co"># periodogram</span></span>
+<span id="cb12-222"><a href="#cb12-222" aria-hidden="true" tabindex="-1"></a>  e <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="sc">-</span>1i <span class="sc">*</span> lam)</span>
+<span id="cb12-223"><a href="#cb12-223" aria-hidden="true" tabindex="-1"></a>  shape <span class="ot">&lt;-</span> <span class="cf">function</span>(ph, th) <span class="fu">Mod</span>(<span class="dv">1</span> <span class="sc">+</span> th <span class="sc">*</span> e)<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> <span class="fu">Mod</span>(<span class="dv">1</span> <span class="sc">-</span> ph <span class="sc">*</span> e)<span class="sc">^</span><span class="dv">2</span>    <span class="co"># spectral shape g</span></span>
+<span id="cb12-224"><a href="#cb12-224" aria-hidden="true" tabindex="-1"></a>  obj <span class="ot">&lt;-</span> <span class="cf">function</span>(p) {                                               <span class="co"># profiled Whittle objective</span></span>
+<span id="cb12-225"><a href="#cb12-225" aria-hidden="true" tabindex="-1"></a>    g <span class="ot">&lt;-</span> <span class="fu">shape</span>(<span class="fu">tanh</span>(p[<span class="dv">1</span>]), <span class="fu">tanh</span>(p[<span class="dv">2</span>]))</span>
+<span id="cb12-226"><a href="#cb12-226" aria-hidden="true" tabindex="-1"></a>    <span class="fu">log</span>(<span class="fu">mean</span>(I <span class="sc">/</span> g)) <span class="sc">+</span> <span class="fu">mean</span>(<span class="fu">log</span>(g))</span>
+<span id="cb12-227"><a href="#cb12-227" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb12-228"><a href="#cb12-228" aria-hidden="true" tabindex="-1"></a>  o <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>), obj, <span class="at">method =</span> <span class="st">"BFGS"</span>)</span>
+<span id="cb12-229"><a href="#cb12-229" aria-hidden="true" tabindex="-1"></a>  ph <span class="ot">&lt;-</span> <span class="fu">tanh</span>(o<span class="sc">$</span>par[<span class="dv">1</span>]); th <span class="ot">&lt;-</span> <span class="fu">tanh</span>(o<span class="sc">$</span>par[<span class="dv">2</span>])</span>
+<span id="cb12-230"><a href="#cb12-230" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="at">phi =</span> ph, <span class="at">theta =</span> th, <span class="at">sigma2 =</span> <span class="fu">mean</span>(I <span class="sc">/</span> <span class="fu">shape</span>(ph, th)))</span>
+<span id="cb12-231"><a href="#cb12-231" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-232"><a href="#cb12-232" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-233"><a href="#cb12-233" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-236"><a href="#cb12-236" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-237"><a href="#cb12-237" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-whittle</span></span>
+<span id="cb12-238"><a href="#cb12-238" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "ARMA(1,1) fitted to the weekly change in EAF by Whittle and by Gaussian maximum likelihood."</span></span>
+<span id="cb12-239"><a href="#cb12-239" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-240"><a href="#cb12-240" aria-hidden="true" tabindex="-1"></a>w_fit <span class="ot">&lt;-</span> <span class="fu">whittle_arma11</span>(dy)</span>
+<span id="cb12-241"><a href="#cb12-241" aria-hidden="true" tabindex="-1"></a>m_fit <span class="ot">&lt;-</span> <span class="fu">arima</span>(dy, <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>))                              <span class="co"># exact Gaussian maximum likelihood</span></span>
+<span id="cb12-242"><a href="#cb12-242" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">Method =</span> <span class="fu">c</span>(<span class="st">"Whittle"</span>, <span class="st">"Gaussian MLE"</span>),</span>
+<span id="cb12-243"><a href="#cb12-243" aria-hidden="true" tabindex="-1"></a>       <span class="at">phi =</span> <span class="fu">c</span>(w_fit[[<span class="st">"phi"</span>]], <span class="fu">coef</span>(m_fit)[[<span class="st">"ar1"</span>]]), <span class="at">theta =</span> <span class="fu">c</span>(w_fit[[<span class="st">"theta"</span>]], <span class="fu">coef</span>(m_fit)[[<span class="st">"ma1"</span>]]),</span>
+<span id="cb12-244"><a href="#cb12-244" aria-hidden="true" tabindex="-1"></a>       <span class="at">sigma2 =</span> <span class="fu">c</span>(w_fit[[<span class="st">"sigma2"</span>]], m_fit<span class="sc">$</span>sigma2)) <span class="sc">|&gt;</span> <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>)</span>
+<span id="cb12-245"><a href="#cb12-245" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-246"><a href="#cb12-246" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-247"><a href="#cb12-247" aria-hidden="true" tabindex="-1"></a>The two methods give <span class="in">`r ifelse(max(abs(w_fit[["phi"]] - coef(m_fit)[["ar1"]]), abs(w_fit[["theta"]] - coef(m_fit)[["ma1"]])) &lt; 0.05, "similar", "noticeably different")`</span> estimates on the real series. A single series cannot show which method is better, so I simulate from a known ARMA(1,1).</span>
+<span id="cb12-248"><a href="#cb12-248" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-251"><a href="#cb12-251" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-252"><a href="#cb12-252" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-whittle-sim</span></span>
+<span id="cb12-253"><a href="#cb12-253" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "200 simulated ARMA(1,1) series of length 231 with phi = 0.7 and theta = 0.5: mean and spread of each estimator."</span></span>
+<span id="cb12-254"><a href="#cb12-254" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-255"><a href="#cb12-255" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="dv">200</span>; truth <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">phi =</span> <span class="fl">0.7</span>, <span class="at">theta =</span> <span class="fl">0.5</span>)</span>
+<span id="cb12-256"><a href="#cb12-256" aria-hidden="true" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">map_dfr</span>(<span class="dv">1</span><span class="sc">:</span>R, <span class="cf">function</span>(r) {</span>
+<span id="cb12-257"><a href="#cb12-257" aria-hidden="true" tabindex="-1"></a>  z <span class="ot">&lt;-</span> <span class="fu">arima.sim</span>(<span class="fu">list</span>(<span class="at">ar =</span> truth[[<span class="st">"phi"</span>]], <span class="at">ma =</span> truth[[<span class="st">"theta"</span>]]), <span class="at">n =</span> <span class="dv">231</span>)   <span class="co"># true ARMA(1,1)</span></span>
+<span id="cb12-258"><a href="#cb12-258" aria-hidden="true" tabindex="-1"></a>  w <span class="ot">&lt;-</span> <span class="fu">whittle_arma11</span>(z)</span>
+<span id="cb12-259"><a href="#cb12-259" aria-hidden="true" tabindex="-1"></a>  f <span class="ot">&lt;-</span> <span class="fu">tryCatch</span>(<span class="fu">arima</span>(z, <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>)), <span class="at">error =</span> <span class="cf">function</span>(e) <span class="cn">NULL</span>)</span>
+<span id="cb12-260"><a href="#cb12-260" aria-hidden="true" tabindex="-1"></a>  mle <span class="ot">&lt;-</span> <span class="cf">if</span> (<span class="fu">is.null</span>(f)) <span class="fu">c</span>(<span class="cn">NA_real_</span>, <span class="cn">NA_real_</span>) <span class="cf">else</span> <span class="fu">unname</span>(<span class="fu">coef</span>(f)[<span class="fu">c</span>(<span class="st">"ar1"</span>, <span class="st">"ma1"</span>)])</span>
+<span id="cb12-261"><a href="#cb12-261" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="at">method =</span> <span class="fu">c</span>(<span class="st">"Whittle"</span>, <span class="st">"Gaussian MLE"</span>), <span class="at">phi =</span> <span class="fu">c</span>(w[[<span class="st">"phi"</span>]], mle[<span class="dv">1</span>]), <span class="at">theta =</span> <span class="fu">c</span>(w[[<span class="st">"theta"</span>]], mle[<span class="dv">2</span>]))</span>
+<span id="cb12-262"><a href="#cb12-262" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb12-263"><a href="#cb12-263" aria-hidden="true" tabindex="-1"></a>sim <span class="sc">|&gt;</span> <span class="fu">group_by</span>(method) <span class="sc">|&gt;</span></span>
+<span id="cb12-264"><a href="#cb12-264" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">`</span><span class="at">Mean phi</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">mean</span>(phi, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="st">`</span><span class="at">SD phi</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sd</span>(phi, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb12-265"><a href="#cb12-265" aria-hidden="true" tabindex="-1"></a>            <span class="st">`</span><span class="at">Mean theta</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">mean</span>(theta, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="st">`</span><span class="at">SD theta</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sd</span>(theta, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb12-266"><a href="#cb12-266" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>)</span>
+<span id="cb12-267"><a href="#cb12-267" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-268"><a href="#cb12-268" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-269"><a href="#cb12-269" aria-hidden="true" tabindex="-1"></a>Both estimators recover φ well (means 0.695 and 0.689 against a true 0.7) with identical spread (SD 0.056). For θ, Whittle is slightly biased downwards (0.484 against a true 0.5, where MLE gives 0.504) and slightly more variable (SD 0.068 against 0.065). Whittle’s cost is therefore a small finite-sample bias in θ, and its benefit is that it needs only one FFT and a two-parameter search.</span>
+<span id="cb12-270"><a href="#cb12-270" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-271"><a href="#cb12-271" aria-hidden="true" tabindex="-1"></a>**Limitations.** The Whittle likelihood is an approximation that improves with sample size, and it treats the periodogram ordinates as independent. It is also awkward when the spectrum has sharp features, because the periodogram is a noisy estimate.</span>
+<span id="cb12-272"><a href="#cb12-272" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-273"><a href="#cb12-273" aria-hidden="true" tabindex="-1"></a><span class="fu"># Beyond the notes 1.4: Long memory and the GPH estimator</span></span>
+<span id="cb12-274"><a href="#cb12-274" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-275"><a href="#cb12-275" aria-hidden="true" tabindex="-1"></a>**Idea.** Differencing assumes a series is either stationary or has a unit root. A fractionally integrated series sits in between, with autocorrelations that decay slowly, and it is common in volatility. The Geweke and Porter-Hudak (GPH) estimator reads the memory parameter $d$ from the slope of the log-periodogram against $\log<span class="sc">\{</span>4\sin^2(\lambda_j/2)<span class="sc">\}</span>$ at the lowest frequencies. A value of 0 means short memory, values between 0 and 0.5 mean stationary long memory, and 1 corresponds to a unit root.</span>
+<span id="cb12-276"><a href="#cb12-276" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-279"><a href="#cb12-279" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-280"><a href="#cb12-280" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: gph</span></span>
+<span id="cb12-281"><a href="#cb12-281" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb12-282"><a href="#cb12-282" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-summary: "GPH estimator of the memory parameter"</span></span>
+<span id="cb12-283"><a href="#cb12-283" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-284"><a href="#cb12-284" aria-hidden="true" tabindex="-1"></a><span class="co"># GPH estimate of d from the lowest m Fourier frequencies, with its asymptotic standard error</span></span>
+<span id="cb12-285"><a href="#cb12-285" aria-hidden="true" tabindex="-1"></a>gph <span class="ot">&lt;-</span> <span class="cf">function</span>(x, m) {</span>
+<span id="cb12-286"><a href="#cb12-286" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">length</span>(x); x <span class="ot">&lt;-</span> x <span class="sc">-</span> <span class="fu">mean</span>(x); j <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>m; lam <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> j <span class="sc">/</span> n</span>
+<span id="cb12-287"><a href="#cb12-287" aria-hidden="true" tabindex="-1"></a>  I <span class="ot">&lt;-</span> (<span class="fu">Mod</span>(<span class="fu">fft</span>(x))[j <span class="sc">+</span> <span class="dv">1</span>])<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> n                                    <span class="co"># periodogram</span></span>
+<span id="cb12-288"><a href="#cb12-288" aria-hidden="true" tabindex="-1"></a>  reg <span class="ot">&lt;-</span> <span class="fu">log</span>(<span class="dv">4</span> <span class="sc">*</span> <span class="fu">sin</span>(lam <span class="sc">/</span> <span class="dv">2</span>)<span class="sc">^</span><span class="dv">2</span>)                                     <span class="co"># regressor</span></span>
+<span id="cb12-289"><a href="#cb12-289" aria-hidden="true" tabindex="-1"></a>  fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">log</span>(I) <span class="sc">~</span> reg)</span>
+<span id="cb12-290"><a href="#cb12-290" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="at">d =</span> <span class="sc">-</span><span class="fu">coef</span>(fit)[[<span class="st">"reg"</span>]], <span class="at">se =</span> <span class="fu">sqrt</span>(pi<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> <span class="dv">6</span> <span class="sc">/</span> <span class="fu">sum</span>((reg <span class="sc">-</span> <span class="fu">mean</span>(reg))<span class="sc">^</span><span class="dv">2</span>)))</span>
+<span id="cb12-291"><a href="#cb12-291" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-292"><a href="#cb12-292" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-293"><a href="#cb12-293" aria-hidden="true" tabindex="-1"></a><span class="co"># Weekly absolute returns of Capitec, from Project 4's price file (simple version, no glitch screen)</span></span>
+<span id="cb12-294"><a href="#cb12-294" aria-hidden="true" tabindex="-1"></a>prices <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"../projects/project-04/data/prices.csv"</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">as.Date</span>(date))</span>
+<span id="cb12-295"><a href="#cb12-295" aria-hidden="true" tabindex="-1"></a>cap <span class="ot">&lt;-</span> prices <span class="sc">|&gt;</span> <span class="fu">filter</span>(series <span class="sc">==</span> <span class="st">"capitec"</span>) <span class="sc">|&gt;</span> <span class="fu">arrange</span>(date) <span class="sc">|&gt;</span></span>
+<span id="cb12-296"><a href="#cb12-296" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">wk =</span> <span class="fu">floor_date</span>(date, <span class="st">"week"</span>, <span class="at">week_start =</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb12-297"><a href="#cb12-297" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(wk) <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="at">adj =</span> dplyr<span class="sc">::</span><span class="fu">last</span>(adj), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb12-298"><a href="#cb12-298" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">r =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="fu">diff</span>(<span class="fu">log</span>(adj)))) <span class="sc">|&gt;</span> <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
+<span id="cb12-299"><a href="#cb12-299" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(wk <span class="sc">&gt;=</span> <span class="fu">as.Date</span>(<span class="st">"2015-01-05"</span>), wk <span class="sc">&lt;=</span> <span class="fu">as.Date</span>(<span class="st">"2026-10-19"</span>))</span>
+<span id="cb12-300"><a href="#cb12-300" aria-hidden="true" tabindex="-1"></a>series <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">`</span><span class="at">EAF level</span><span class="st">`</span> <span class="ot">=</span> y, <span class="st">`</span><span class="at">Weekly change in EAF</span><span class="st">`</span> <span class="ot">=</span> dy, <span class="st">`</span><span class="at">Capitec absolute weekly return</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">abs</span>(cap<span class="sc">$</span>r))</span>
+<span id="cb12-301"><a href="#cb12-301" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-302"><a href="#cb12-302" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-305"><a href="#cb12-305" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-306"><a href="#cb12-306" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-gph</span></span>
+<span id="cb12-307"><a href="#cb12-307" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "GPH estimates of the memory parameter d at two bandwidths (m = n^0.5 and n^0.65), with asymptotic standard errors."</span></span>
+<span id="cb12-308"><a href="#cb12-308" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-309"><a href="#cb12-309" aria-hidden="true" tabindex="-1"></a><span class="fu">map_dfr</span>(<span class="fu">names</span>(series), <span class="cf">function</span>(nm) {</span>
+<span id="cb12-310"><a href="#cb12-310" aria-hidden="true" tabindex="-1"></a>  z <span class="ot">&lt;-</span> series[[nm]]; n <span class="ot">&lt;-</span> <span class="fu">length</span>(z)</span>
+<span id="cb12-311"><a href="#cb12-311" aria-hidden="true" tabindex="-1"></a>  a <span class="ot">&lt;-</span> <span class="fu">gph</span>(z, <span class="fu">floor</span>(n<span class="sc">^</span><span class="fl">0.5</span>)); b <span class="ot">&lt;-</span> <span class="fu">gph</span>(z, <span class="fu">floor</span>(n<span class="sc">^</span><span class="fl">0.65</span>))</span>
+<span id="cb12-312"><a href="#cb12-312" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="at">Series =</span> nm, <span class="at">n =</span> n, <span class="st">`</span><span class="at">d (m = n^0.5)</span><span class="st">`</span> <span class="ot">=</span> a[[<span class="st">"d"</span>]], <span class="st">`</span><span class="at">se 1</span><span class="st">`</span> <span class="ot">=</span> a[[<span class="st">"se"</span>]], <span class="st">`</span><span class="at">d (m = n^0.65)</span><span class="st">`</span> <span class="ot">=</span> b[[<span class="st">"d"</span>]], <span class="st">`</span><span class="at">se 2</span><span class="st">`</span> <span class="ot">=</span> b[[<span class="st">"se"</span>]])</span>
+<span id="cb12-313"><a href="#cb12-313" aria-hidden="true" tabindex="-1"></a>}) <span class="sc">|&gt;</span> <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">2</span>)</span>
+<span id="cb12-314"><a href="#cb12-314" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-315"><a href="#cb12-315" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-316"><a href="#cb12-316" aria-hidden="true" tabindex="-1"></a>The EAF level has d close to 1 (0.99 and 0.89), consistent with a unit root and with the decision to difference. The weekly change is not near 0: d is −0.51 at m = n^0.5 and −0.28 at m = n^0.65, both more than two standard errors below zero. This suggests the differenced series is over-differenced or anti-persistent, not that it has long memory. Capitec’s absolute return falls between 0 and 0.5 at both bandwidths (0.08 and 0.22), but only the wider bandwidth distinguishes it from 0 (0.22 with se 0.09), so the evidence for volatility persistence depends on the bandwidth. The estimates move noticeably with m, so I read them as rough indications and not as precise values.</span>
+<span id="cb12-317"><a href="#cb12-317" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-318"><a href="#cb12-318" aria-hidden="true" tabindex="-1"></a>**Limitations.** GPH is biased when there is short-memory structure, is sensitive to the bandwidth, and is imprecise in samples of a few hundred observations. The asymptotic theory is for stationary series, so the EAF level is a rough check only. This ties to Project 1, where GARCH captures volatility persistence with a different mechanism.</span>
+<span id="cb12-319"><a href="#cb12-319" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-320"><a href="#cb12-320" aria-hidden="true" tabindex="-1"></a><span class="fu"># Reflection</span></span>
+<span id="cb12-321"><a href="#cb12-321" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-322"><a href="#cb12-322" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>*Whittle:* “the Whittle simulation showed almost the same spread as maximum likelihood and only a small downward bias in θ (0.484 against 0.5), which is a fair price for a method that needs one FFT”</span>
+<span id="cb12-323"><a href="#cb12-323" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-324"><a href="#cb12-324" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Long memory:** “moved with the bandwidth (for the weekly change in EAF, from −0.51 to −0.28), so I treat them as indicative, with wide standard errors, not as point facts”</span>
+<span id="cb12-325"><a href="#cb12-325" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-326"><a href="#cb12-326" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**ARIMA:** “did not beat the naive benchmark on the 26-week hold-out (RMSE 4.02 against 3.59), though its 80% and 95% intervals both contained 96% of actuals, so the 80% intervals were wider than needed”</span>
+<span id="cb12-327"><a href="#cb12-327" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-328"><a href="#cb12-328" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-329"><a href="#cb12-329" aria-hidden="true" tabindex="-1"></a>Journal entries for this section are in the <span class="co">[</span><span class="ot">journal</span><span class="co">](../journal/index.html)</span>, and my AI use is declared in the <span class="co">[</span><span class="ot">AI Use Log</span><span class="co">](../appendix/ai_use_log.html)</span>.</span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">Ethon Felix | UCT Statistics &amp; Data Science Honours</div>   
+    <div class="nav-footer-center">© 2026</div>
+    <div class="nav-footer-right">Last updated: Oct 30, 2026</div>
+  </div>
+</footer>
+
+
+
+</body></html>

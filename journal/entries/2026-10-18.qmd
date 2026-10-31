@@ -1,0 +1,27 @@
+---
+title: "Sun 18 Oct 2026"
+date: 2026-10-18
+categories: ["Hidden Markov models (1)"]
+---
+
+**Session / topic:** Weekly reflection
+
+## What I did
+Reviewed Project 4 and Section 2 progress.
+
+## What I learned
+The Kalman filter and the HMM forward pass use the same predict-and-update logic.
+
+## Difficulties and open questions
+Time is tight, so the list of extras must be cut.
+
+## What I will do next
+Code Baum-Welch and Viterbi.
+
+## AI assistance
+None.
+
+## Links
+- [Project 4](../../projects/project-04/index.html)
+- [Section 2](../../section_2/section_2.html)
+

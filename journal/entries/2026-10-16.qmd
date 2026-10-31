@@ -1,0 +1,26 @@
+---
+title: "Fri 16 Oct 2026"
+date: 2026-10-16
+categories: ["Hidden Markov models (1)"]
+---
+
+**Session / topic:** Forecast comparison
+
+## What I did
+Added a diffuse prior and a drift state, and compared forecasts with a Diebold-Mariano test.
+
+## What I learned
+Likelihoods from models with a diffuse component are not comparable, so I only compare nested models.
+
+## Difficulties and open questions
+Choosing the long-run variance estimator.
+
+## What I will do next
+Start Section 2.
+
+## AI assistance
+Discussed the design with Claude (drift and DM test); decisions and code are mine.
+
+## Links
+- [Project 4](../../projects/project-04/index.html)
+

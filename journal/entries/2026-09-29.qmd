@@ -1,0 +1,27 @@
+---
+title: "Tue 29 Sept 2026"
+date: 2026-09-29
+categories: ["State-space models"]
+---
+
+**Session / topic:** Whittle estimation
+
+## What I did
+Coded Whittle estimation for an ARMA(1,1) and checked recovery on simulated data.
+
+## What I learned
+Parameters were poorly identified when the AR and MA terms nearly cancel, so I changed the true values.
+
+## Difficulties and open questions
+Unstable estimates at the original parameters.
+
+## What I will do next
+Code the GPH estimator.
+
+## AI assistance
+Used Claude to help interpret an error (unstable Whittle); I fixed the code myself.
+
+## Links
+- [Section 1](../../section-1/section_1.html)
+- [Appendix](../../appendix/code_and_data.html)
+

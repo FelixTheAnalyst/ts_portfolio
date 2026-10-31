@@ -1,0 +1,26 @@
+---
+title: "Mon 28 Sept 2026"
+date: 2026-09-28
+categories: ["State-space models"]
+---
+
+**Session / topic:** Section 1 plan
+
+## What I did
+Planned Section 1: a Whittle likelihood fit and a GPH long-memory estimate, tied to Project 2's spectra.
+
+## What I learned
+The Whittle likelihood approximates the Gaussian likelihood in the frequency domain.
+
+## Difficulties and open questions
+Following the derivation of the approximation.
+
+## What I will do next
+Code Whittle for an ARMA(1,1).
+
+## AI assistance
+Used Claude to clarify [Whittle approximation]; the work and write-up are my own.
+
+## Links
+- [Section 1](../../section_1/section_1.html)
+

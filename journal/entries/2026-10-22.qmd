@@ -1,0 +1,26 @@
+---
+title: "Thu 22 Oct 2026"
+date: 2026-10-22
+categories: ["Hidden Markov models (2) and assembly"]
+---
+
+**Session / topic:** Project 4 write-up
+
+## What I did
+Wrote the Project 4 text and built the comparison, forecast and evidence tables.
+
+## What I learned
+Reporting the nested comparison only is clearer than reporting every model.
+
+## Difficulties and open questions
+Explaining the boundary test in plain words.
+
+## What I will do next
+Assemble the site.
+
+## AI assistance
+Used Claude to clarify [explaining the boundary test]; the work and write-up are my own.
+
+## Links
+- [Project 4](../../projects/project-04/index.html)
+

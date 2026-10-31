@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.433">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Time Series Portfolio - Reflective commentary</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>
+
+      .quarto-title-block .quarto-title-banner h1,
+      .quarto-title-block .quarto-title-banner h2,
+      .quarto-title-block .quarto-title-banner h3,
+      .quarto-title-block .quarto-title-banner h4,
+      .quarto-title-block .quarto-title-banner h5,
+      .quarto-title-block .quarto-title-banner h6
+      {
+        color: #ffffff;
+      }
+
+      .quarto-title-block .quarto-title-banner {
+        color: #ffffff;
+background: #000000;
+      }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&amp;family=Playfair+Display:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>#title-block-header::after { display: none; }</style>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css">
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Time Series Portfolio</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./reflective_commentary.html" rel="" target="" aria-current="page">
+ <span class="menu-text">Reflection</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./journal/index.html" rel="" target="">
+ <span class="menu-text">Journal</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./projects/index.html" rel="" target="">
+ <span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-appendix" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Appendix</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-appendix">    
+        <li>
+    <a class="dropdown-item" href="./appendix/code_and_data.html" rel="" target="">
+ <span class="dropdown-text">Code &amp; Data</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./appendix/ai_use_log.html" rel="" target="">
+ <span class="dropdown-text">AI Use Log</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <div class="quarto-navbar-tools ms-auto">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <div class="quarto-title-block"><div><h1 class="title">Reflective commentary</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>At the start of this module, I approached time series modelling predominantly as a mechanical fitting exercise: selecting a model family, estimating parameters, comparing information criteria, and declaring a winner. However, the trajectory of the four projects fundamentally reshaped this perspective. By the conclusion of the coursework, my core inquiry had shifted from asking whether a model fit to questioning whether the underlying data could support any model at all, and critically, what inferences I would be entitled to draw if it could not. This reflective commentary traces that evolution through four pivotal moments where my initial expectations proved mistaken.</p>
+<p>Project 2 investigated whether Eskom’s energy availability and the JSE All Share index share cyclical dynamics. The squared coherence function registered a prominent peak of 0.67 at a period of seven weeks, which immediately presented itself as the natural headline finding. Yet, this interpretation overlooked fundamental statistical properties: (1) coherence is estimated via a smoothed periodogram characterized by few effective degrees of freedom, and (2) my analytical process involved searching across a broad spectrum of frequencies to isolate the maximum value. A standard single-frequency critical value fails to account for this multiple-testing search space.</p>
+<p>To rigorously address this, I simulated the null distribution of the maximum statistic. The observed peak yielded a family-wise <span class="math inline">p</span>-value of 0.127, precluding any rejection of the null. Although one of six robustness alternatives did reject, I transparently reported that result alongside its context. Furthermore, because the dataset spanned only approximately 231 weeks, the inherent sample size strictly constrained statistical power; consequently, I framed the conclusion as suggestive and underpowered rather than as definitive evidence of an absence of relationship.</p>
+<p>This marked the module’s turning point where methodological precision regarding uncertainty superseded the desire for a clean, affirmative answer. This project also underscored the vital importance of rigorous code auditing. My custom coherence routine diverged from spec.pgram by roughly <span class="math inline">1.6 \times 10^{-2}</span> until I successfully aligned the internal demeaning procedures. While the discrepancy was minor, it would have remained entirely undetected without direct comparative verification.</p>
+<p>In Section 1, I implemented the Whittle likelihood for an ARMA(1,1) process and evaluated parameter recovery using simulated data. Initial specifications with <span class="math inline">\phi = 0.6</span> and <span class="math inline">\theta = -0.4</span> produced highly unstable estimates. The underlying cause was structural: when the autoregressive and moving average roots lie in close proximity, the two terms nearly cancel out, rendering the likelihood surface exceptionally flat in that direction. The estimator was functioning precisely as designed; rather, the flaw lay in my simulation parameterisation. By adjusting the true parameters to <span class="math inline">\phi = 0.7</span> and <span class="math inline">\theta = 0.5</span>, where the roots are cleanly separated, parameter recovery behaved sensibly. This investigation demonstrated that a simulation study merely illustrates where a method functions, and the specific parameter values selected actively dictate what insights are acquired. Consequently, I now treat parameter selection as an integral component of the analytical design, explicitly detailing its rationale in the write-up.</p>
+<p>Project 3 was originally intended to examine pension withdrawals under South Africa’s Two-Pot retirement system, yet no public time series of actual withdrawal counts existed. Rather than forcing an artificial proxy, I constructed a bespoke simulation calibrated directly against published SARS figures while analyzing Google Trends data separately via a quasi-Poisson framework, ensuring both components remained meticulously distinguished and labelled. The simulation provided a reliable sandbox to verify that my hand-coded Iteratively Reweighted Least Squares (IRLS) algorithm for the negative-binomial model successfully recovered known parameters. Simultaneously, the Google Trends data illustrated the empirical nature of a real yet indirect behavioural signal. Formulating the methodological justification for this dual-pronged design reinforced a broader lesson: stating data limitations plainly and honestly equips the reader with a sound basis to trust every other facet of the analysis.</p>
+<p>Project 4 utilized a state-space regression model featuring time-varying coefficients. To formally test whether the coefficients genuinely varied over time, I compared it against a constant-coefficient specification using a likelihood-ratio test. Because the null hypothesis restricts a variance parameter to zero, sitting squarely on the boundary of the parameter space, the conventional <span class="math inline">\chi^2</span> asymptotic reference distribution is invalid. The correct theoretical reference is instead an equal mixture of <span class="math inline">\chi^2_0</span> and <span class="math inline">\chi^2_1</span> distributions. Additionally, I discovered that the likelihood value of the diffuse-drift model was incomparable with the other specifications; consequently, I restricted formal likelihood comparisons strictly to the nested pair and evaluated the broader model set via out-of-sample forecasts validated through a Diebold-Mariano test. Notably, neither Kalman filter model outperformed an expanding-window OLS benchmark out of sample (yielding a best Mean Squared Error ratio of 1.000, which collapses identically to OLS), confirming that the added model flexibility yielded zero forecasting gains. Both lessons stem from a single essential habit: rigorously verifying that two numerical metrics actually measure the exact identical quantity before attempting a comparison.</p>
+<p>Reflecting on the workflow, I would prioritize establishing the evaluation framework prior to constructing the model architecture. Across several projects, I wrote the estimation code first and devised the validation strategy afterward. For instance, the true ARMA(1,1) parameters for the Whittle study were only locked down after the initial recovery run failed, necessitating a complete re-run of the entire simulation pipeline. Furthermore, I would maintain contemporaneous logs detailing the rationale behind each analytical decision, as compiling the retrospective journal vividly exposed how easily nuanced decisions are forgotten when reconstructed later. In Section 2, the hidden Markov model inherently implies geometric state durations. My empirical duration check revealed observed run lengths closely mirroring geometric expectations, for example, 7.2 weeks against a theoretical 7.3 weeks for regime 3, with only regime 1 showing a noticeable divergence (10.7 against 14.0 weeks). While the data offered no definitive evidence to reject the Markov assumption, the total sample of 21 observed runs remains too sparse to be conclusive. Moving forward, I am keen to explore semi-Markov formulations, which allow the duration distribution to be modelled explicitly.</p>
+<p>Ultimately, the module did not alter my conviction that rigorous modelling matters; rather, it redefined what I consider rigorous. A model that achieves a strong statistical fit merely marks the commencement of the analytical work. The true substance lies in rigorously determining what the data can and cannot substantiate, and articulating those boundaries clearly so that independent scrutiny is genuinely possible.</p>
+<p><strong>Word Count:</strong> 1027</p>
+
+
+<!-- -->
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Reflective commentary"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>At the start of this module, I approached time series modelling predominantly as a mechanical fitting exercise: selecting a model family, estimating parameters, comparing information criteria, and declaring a winner. However, the trajectory of the four projects fundamentally reshaped this perspective. By the conclusion of the coursework, my core inquiry had shifted from asking whether a model fit to questioning whether the underlying data could support any model at all, and critically, what inferences I would be entitled to draw if it could not. This reflective commentary traces that evolution through four pivotal moments where my initial expectations proved mistaken.</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>\vspace{0.2cm}</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>Project 2 investigated whether Eskom's energy availability and the JSE All Share index share cyclical dynamics. The squared coherence function registered a prominent peak of 0.67 at a period of seven weeks, which immediately presented itself as the natural headline finding. Yet, this interpretation overlooked fundamental statistical properties: (1) coherence is estimated via a smoothed periodogram characterized by few effective degrees of freedom, and (2) my analytical process involved searching across a broad spectrum of frequencies to isolate the maximum value. A standard single-frequency critical value fails to account for this multiple-testing search space. </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>\vspace{0.2cm}</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>To rigorously address this, I simulated the null distribution of the maximum statistic. The observed peak yielded a family-wise $p$-value of 0.127, precluding any rejection of the null. Although one of six robustness alternatives did reject, I transparently reported that result alongside its context. Furthermore, because the dataset spanned only approximately 231 weeks, the inherent sample size strictly constrained statistical power; consequently, I framed the conclusion as suggestive and underpowered rather than as definitive evidence of an absence of relationship. </span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>\vspace{0.2cm}</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>This marked the module's turning point where methodological precision regarding uncertainty superseded the desire for a clean, affirmative answer. This project also underscored the vital importance of rigorous code auditing. My custom coherence routine diverged from spec.pgram by roughly $1.6 \times 10^{-2}$ until I successfully aligned the internal demeaning procedures. While the discrepancy was minor, it would have remained entirely undetected without direct comparative verification.</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>\vspace{0.2cm}</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>In Section 1, I implemented the Whittle likelihood for an ARMA(1,1) process and evaluated parameter recovery using simulated data. Initial specifications with $\phi = 0.6$ and $\theta = -0.4$ produced highly unstable estimates. The underlying cause was structural: when the autoregressive and moving average roots lie in close proximity, the two terms nearly cancel out, rendering the likelihood surface exceptionally flat in that direction. The estimator was functioning precisely as designed; rather, the flaw lay in my simulation parameterisation. By adjusting the true parameters to $\phi = 0.7$ and $\theta = 0.5$, where the roots are cleanly separated, parameter recovery behaved sensibly. This investigation demonstrated that a simulation study merely illustrates where a method functions, and the specific parameter values selected actively dictate what insights are acquired. Consequently, I now treat parameter selection as an integral component of the analytical design, explicitly detailing its rationale in the write-up.</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>\vspace{0.2cm}</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>Project 3 was originally intended to examine pension withdrawals under South Africa's Two-Pot retirement system, yet no public time series of actual withdrawal counts existed. Rather than forcing an artificial proxy, I constructed a bespoke simulation calibrated directly against published SARS figures while analyzing Google Trends data separately via a quasi-Poisson framework, ensuring both components remained meticulously distinguished and labelled. The simulation provided a reliable sandbox to verify that my hand-coded Iteratively Reweighted Least Squares (IRLS) algorithm for the negative-binomial model successfully recovered known parameters. Simultaneously, the Google Trends data illustrated the empirical nature of a real yet indirect behavioural signal. Formulating the methodological justification for this dual-pronged design reinforced a broader lesson: stating data limitations plainly and honestly equips the reader with a sound basis to trust every other facet of the analysis.</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>\vspace{0.2cm}</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>Project 4 utilized a state-space regression model featuring time-varying coefficients. To formally test whether the coefficients genuinely varied over time, I compared it against a constant-coefficient specification using a likelihood-ratio test. Because the null hypothesis restricts a variance parameter to zero, sitting squarely on the boundary of the parameter space, the conventional $\chi^2$ asymptotic reference distribution is invalid. The correct theoretical reference is instead an equal mixture of $\chi^2_0$ and $\chi^2_1$ distributions. Additionally, I discovered that the likelihood value of the diffuse-drift model was incomparable with the other specifications; consequently, I restricted formal likelihood comparisons strictly to the nested pair and evaluated the broader model set via out-of-sample forecasts validated through a Diebold-Mariano test. Notably, neither Kalman filter model outperformed an expanding-window OLS benchmark out of sample (yielding a best Mean Squared Error ratio of 1.000, which collapses identically to OLS), confirming that the added model flexibility yielded zero forecasting gains. Both lessons stem from a single essential habit: rigorously verifying that two numerical metrics actually measure the exact identical quantity before attempting a comparison.</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>\vspace{0.2cm}</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>Reflecting on the workflow, I would prioritize establishing the evaluation framework prior to constructing the model architecture. Across several projects, I wrote the estimation code first and devised the validation strategy afterward. For instance, the true ARMA(1,1) parameters for the Whittle study were only locked down after the initial recovery run failed, necessitating a complete re-run of the entire simulation pipeline. Furthermore, I would maintain contemporaneous logs detailing the rationale behind each analytical decision, as compiling the retrospective journal vividly exposed how easily nuanced decisions are forgotten when reconstructed later. In Section 2, the hidden Markov model inherently implies geometric state durations. My empirical duration check revealed observed run lengths closely mirroring geometric expectations, for example, 7.2 weeks against a theoretical 7.3 weeks for regime 3, with only regime 1 showing a noticeable divergence (10.7 against 14.0 weeks). While the data offered no definitive evidence to reject the Markov assumption, the total sample of 21 observed runs remains too sparse to be conclusive. Moving forward, I am keen to explore semi-Markov formulations, which allow the duration distribution to be modelled explicitly.</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>\vspace{0.2cm}</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>Ultimately, the module did not alter my conviction that rigorous modelling matters; rather, it redefined what I consider rigorous. A model that achieves a strong statistical fit merely marks the commencement of the analytical work. The true substance lies in rigorously determining what the data can and cannot substantiate, and articulating those boundaries clearly so that independent scrutiny is genuinely possible.</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>\vspace{0.5cm}</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>**Word Count:** 1027</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">Ethon Felix | UCT Statistics &amp; Data Science Honours</div>   
+    <div class="nav-footer-center">© 2026</div>
+    <div class="nav-footer-right">Last updated: Oct 30, 2026</div>
+  </div>
+</footer>
+
+
+
+</body></html>

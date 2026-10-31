@@ -1,0 +1,26 @@
+---
+title: "Mon 12 Oct 2026"
+date: 2026-10-12
+categories: ["Hidden Markov models (1)"]
+---
+
+**Session / topic:** HMM foundations (notes released)
+
+## What I did
+Read the notes on hidden Markov models, forward-backward recursions and scaling.
+
+## What I learned
+Scaling the recursions prevents underflow in long sequences.
+
+## Difficulties and open questions
+Keeping track of the forward and backward quantities.
+
+## What I will do next
+Design the Project 4 model.
+
+## AI assistance
+Used Claude to clarify [HMM recursions]; the work and write-up are my own.
+
+## Links
+- [Section 2](../../section_2/section_2.html)
+

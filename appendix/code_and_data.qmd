@@ -1,0 +1,54 @@
+---
+title: "Code and data"
+---
+
+All results can be rebuilt from the scripts listed here. Run `quarto render`
+from the portfolio root.
+
+## Data reconciliation
+
+Each row records a data decision that changes what a reader would assume.
+
+| Project | Source | Decision | Effect |
+|---|---|---|---|
+| 2 | Eskom EAF (hourly) | 4,800 blank hours dropped; aggregated to weekly | Usable window 2019-04-01 to 2023-09-04, n = 231 |
+| 2 | JSE All Share | 21 missing quotes handled by [your rule] | Weekly series aligned to EAF |
+| 2 | JSE data | [Any glitch dates and treatment] | [Effect] |
+| 3 | Two-Pot withdrawals | No public series; simulation calibrated to SARS anchors | Simulated counts, labelled as such |
+| 3 | Google Trends | Quasi-Poisson on the scaled index | Not a count series |
+| 4 | Six price series | 2014-12-01 to 2026-10-30; missing values in ^J203.JO handled by [your rule] | n = [rows after cleaning] |
+
+
+## Scripts
+
+| Script | Purpose |
+|---|---|
+| `projects/project-02/data_extract.R` | Builds the weekly EAF and All Share series |
+| `projects/project-03/data_extract.R` | Builds the Trends data and simulation anchors |
+| `projects/project-04/analysis.qmd` | Pulls and cleans the six price series |
+| `journal/journal_template.R` | Generates the journal entries (not rendered) |
+
+## Data files present
+
+```{r}
+#| label: data-files
+#| echo: true
+# List each project's data folder with file sizes, to show what the site used
+dirs <- list.dirs("../projects", recursive = FALSE)
+files <- unlist(lapply(file.path(dirs, "data"), function(d)
+  if (dir.exists(d)) list.files(d, full.names = TRUE) else NULL))
+if (length(files)) {
+  info <- file.info(files)
+  knitr::kable(data.frame(file = sub("^\\.\\./", "", files),
+                          size_kb = round(info$size / 1024, 1)))
+} else cat("No data files found.")
+```
+
+## Software environment
+
+```{r}
+#| label: session
+#| echo: true
+# Record R and package versions so results can be reproduced
+sessionInfo()
+```

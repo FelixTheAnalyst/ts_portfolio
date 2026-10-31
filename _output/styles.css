@@ -1,0 +1,192 @@
+/* ---------- Fonts: elegant serif pairing ---------- */
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:wght@500;600;700&display=swap');
+
+:root { --blue: #1a5fd0; --line: #e6e8ec; }
+
+/* ---------- Base: white page, black text, blue accents ---------- */
+body { font-family: 'Lora', Georgia, serif; background: #fff; color: #000; }
+h1, h2, h3, h4, .title, .navbar-title, .navbar .nav-link {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+a { color: var(--blue); }
+a:hover { color: #0b3d91; }
+hr { border-color: var(--line); opacity: 1; }
+
+/* ---------- Floating tabs: darkest black, white text ---------- */
+.navbar { background: #000 !important; }
+.navbar .navbar-brand, .navbar .navbar-title, .navbar .nav-link,
+.navbar .menu-text { color: #fff !important; }
+.navbar .nav-link.active { border-bottom: 2px solid var(--blue); }
+.navbar .nav-link:hover { color: #9cc0ff !important; }
+
+/* ---------- Title block: banner + metadata share one black band ---------- */
+#title-block-header {
+  background: #000;
+  position: relative;
+  padding-bottom: 2rem;
+}
+#title-block-header .quarto-title-banner {
+  background: transparent !important;   /* let the black header show through */
+  padding-bottom: .5rem;
+}
+#title-block-header .title,
+#title-block-header .subtitle,
+#title-block-header .quarto-title-meta-heading,
+#title-block-header .quarto-title-meta-contents,
+#title-block-header .quarto-title-meta-contents p { color: #fff !important; }
+
+/* Metadata stacked as "Label: value", aligned with the title's left edge */
+#title-block-header .quarto-title-meta {
+  display: flex !important;
+  flex-direction: column;
+  gap: .2rem;
+  grid-column: body-start / body-content-end;  /* same column as the title */
+}
+#title-block-header .quarto-title-meta > div { display: flex; gap: .5rem; align-items: baseline; }
+#title-block-header .quarto-title-meta-heading { text-transform: none; font-weight: 600; }
+#title-block-header .quarto-title-meta-heading::after { content: ":"; }
+#title-block-header .quarto-title-meta-contents p { margin: 0; }
+
+/* UCT logo, white on black, vertically centred in the band */
+#title-block-header::after {
+  content: "";
+  position: absolute;
+  right: max(2rem, 6vw);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 150px; height: 150px;
+  background: url("images/uct-logo.png") center / contain no-repeat;
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 10px;
+}
+@media (max-width: 700px) { #title-block-header::after { display: none; } }
+
+/* ---------- Notion-style gallery cards ---------- */
+.pf-label {
+  font-size: .8rem; font-weight: 600; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--blue); margin: 1.5rem 0 .75rem;
+}
+.pf-gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+@media (max-width: 700px) { .pf-gallery { grid-template-columns: 1fr; } }
+
+.pf-card {
+  display: block; background: #fff; color: #000 !important;
+  border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
+  text-decoration: none !important;
+  transition: box-shadow .2s, transform .2s, border-color .2s;
+}
+.pf-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .08);
+  transform: translateY(-2px);
+  border-color: var(--blue);
+}
+.pf-cover { aspect-ratio: 16 / 9; background: #f4f7fd; border-bottom: 1px solid var(--line); }
+.pf-cover svg { width: 100%; height: 100%; display: block; }
+.pf-body { padding: 1rem 1.15rem 1.2rem; }
+.pf-title { font-family: 'Playfair Display', Georgia, serif; font-weight: 600; font-size: 1.15rem; margin: 0 0 .25rem; }
+.pf-caption { margin: 0 0 .65rem; font-size: .95rem; }
+.pf-tags span {
+  display: inline-block; font-size: .72rem; padding: .15rem .55rem; margin: 0 .3rem .3rem 0;
+  border-radius: 999px; background: #e8f0fe; color: var(--blue);
+}
+
+
+/* ---------- Vertical flow of project cards ---------- */
+.flow { max-width: 880px; margin: 1.75rem auto 2rem; display: flex; flex-direction: column; }
+
+/* Card: black header on top, body and figure side by side below */
+.flow-card {
+  display: block; background: #fff; color: #000 !important;
+  border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
+  text-decoration: none !important;
+  transition: box-shadow .2s, transform .2s, border-color .2s;
+}
+.flow-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,.08); transform: translateY(-2px); border-color: var(--blue); }
+
+/* Header: project number in light blue, name in white serif */
+.flow-head { background: #000; padding: .75rem 1.15rem; display: flex; align-items: baseline; gap: .85rem; }
+.flow-step { font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: #9cc0ff; white-space: nowrap; }
+.flow-title { font-family: 'Playfair Display', Georgia, serif; font-weight: 600; font-size: 1.1rem; color: #fff; }
+
+/* Body (text) left, figure right */
+.flow-main { display: grid; grid-template-columns: 1fr 290px; }
+.flow-body { padding: 1rem 1.15rem 1.15rem; }
+.flow-body p { margin: 0 0 .75rem; font-size: .95rem; }
+.flow-tags span {
+  display: inline-block; font-size: .72rem; padding: .15rem .55rem; margin: 0 .3rem .3rem 0;
+  border-radius: 999px; background: #e8f0fe; color: var(--blue);
+}
+.flow-open { margin-top: .5rem; font-size: .88rem; font-weight: 600; color: var(--blue); }
+.flow-fig { background: #f4f7fd; border-left: 1px solid var(--line); display: flex; align-items: center; }
+.flow-fig svg, .flow-fig img { width: 100%; height: 100%; display: block; object-fit: contain; }
+
+/* Connector: blue line with arrowhead and a label pill in the middle */
+.flow-arrow { position: relative; height: 78px; display: flex; align-items: center; justify-content: center; }
+.flow-arrow::before {            /* the line */
+  content: ""; position: absolute; left: 50%; top: 0; bottom: 9px; width: 2px;
+  background: var(--blue); transform: translateX(-50%);
+}
+.flow-arrow::after {             /* the arrowhead */
+  content: ""; position: absolute; left: 50%; bottom: 0; transform: translateX(-50%);
+  border-left: 7px solid transparent; border-right: 7px solid transparent; border-top: 10px solid var(--blue);
+}
+.flow-arrow span {
+  position: relative; z-index: 1; background: #fff; border: 1px solid var(--blue);
+  color: var(--blue); font-size: .78rem; padding: .2rem .75rem; border-radius: 999px;
+}
+
+/* Phone width: figure drops below the text */
+@media (max-width: 700px) {
+  .flow-main { grid-template-columns: 1fr; }
+  .flow-fig { border-left: 0; border-top: 1px solid var(--line); height: 190px; }
+  .flow-head { flex-direction: column; gap: .15rem; }
+}
+
+/* ---------- Project summary page ---------- */
+/* Four headline-number tiles */
+.pf-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .8rem; margin: 1rem 0 1.25rem; }
+.pf-stat { border: 1px solid var(--line); border-radius: 10px; padding: .7rem .8rem; background: #f8faff; }
+.pf-stat-n { font-family: 'Playfair Display', Georgia, serif; font-size: 1.45rem; font-weight: 600; color: var(--blue); line-height: 1.1; }
+.pf-stat-l { font-size: .75rem; color: #333; margin-top: .25rem; }
+@media (max-width: 700px) { .pf-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* Two-column facts table: hide the empty header row, bold the labels */
+.pf-meta table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+.pf-meta thead { display: none; }
+.pf-meta td { padding: .45rem .6rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+.pf-meta td:first-child { width: 28%; font-weight: 600; white-space: nowrap; }
+
+/* Black call-to-action button */
+.pf-button { display: inline-block; background: #000; color: #fff !important; padding: .6rem 1.2rem;
+  border-radius: 8px; font-weight: 600; text-decoration: none !important; transition: background .2s; }
+.pf-button:hover { background: var(--blue); }
+
+/* ---------- Report pages: summary and analysis ---------- */
+#quarto-document-content { line-height: 1.65; }
+
+/* Section headings: serif, with a thin rule under top-level ones */
+main section.level1 > h1 { font-family: 'Playfair Display', Georgia, serif; font-size: 1.65rem;
+  margin-top: 2.6rem; padding-bottom: .35rem; border-bottom: 1px solid var(--line); }
+main section.level2 > h2, main section.level3 > h3 { font-family: 'Playfair Display', Georgia, serif; }
+
+/* Tables: academic top and bottom rules, light striping, captions above */
+main table.table { font-size: .88rem; border-top: 2px solid #000; border-bottom: 2px solid #000;
+  --bs-table-striped-bg: #f6f8fc; }
+main table.table thead th { border-bottom: 1px solid #000; font-weight: 600; }
+main table caption { caption-side: top; color: #333; font-size: .85rem; text-align: left; padding-bottom: .5rem; }
+
+/* Figures: framed, with quiet left-aligned captions */
+main figure img, .cell-output-display > img { border: 1px solid var(--line); border-radius: 8px;
+  padding: 6px; background: #fff; }
+.figure-caption { font-size: .85rem; color: #555; text-align: left; }
+
+/* Code: soft card, blue toggle label, tinted inline code */
+div.sourceCode { border: 1px solid var(--line); border-radius: 8px; background: #f8faff; }
+details.code-fold > summary { color: var(--blue); font-size: .8rem; cursor: pointer; }
+:not(pre) > code { color: #0b3d91; background: #eef3fd; padding: .1em .35em; border-radius: 4px; }
+
+/* Table of contents and link accents */
+#TOC .nav-link { font-size: .85rem; }
+#TOC .nav-link.active { color: var(--blue) !important; border-left-color: var(--blue) !important; }
+.citation a, a.quarto-xref { color: var(--blue); }

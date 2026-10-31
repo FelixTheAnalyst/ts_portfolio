@@ -1,0 +1,26 @@
+---
+title: "Fri 25 Sept 2026"
+date: 2026-09-25
+categories: ["Regression with ARMA errors"]
+---
+
+**Session / topic:** Robustness
+
+## What I did
+Re-ran the analysis with alternative filters and spans.
+
+## What I learned
+A finding should survive reasonable analytic choices.
+
+## Difficulties and open questions
+Interpreting a non-rejection honestly rather than hunting for a significant result.
+
+## What I will do next
+Write up the Project 2 results.
+
+## AI assistance
+None.
+
+## Links
+- [Project 2](../../projects/project-02/index.html)
+

@@ -1,0 +1,27 @@
+---
+title: "Thu 01 Oct 2026"
+date: 2026-10-01
+categories: ["State-space models"]
+---
+
+**Session / topic:** Project 3 data decision
+
+## What I did
+Decided that no public Two-Pot withdrawal count series exists, so Project 3 uses a simulation anchored to SARS figures plus Google Trends.
+
+## What I learned
+When the ideal data is not available, the substitute must be labelled clearly.
+
+## Difficulties and open questions
+Justifying a hybrid design without overstating it.
+
+## What I will do next
+Design the count model.
+
+## AI assistance
+Discussed the design with Claude (Project 3 hybrid design and GLM); decisions and code are mine.
+
+## Links
+- [Project 3](../../projects/project-03/index.html)
+- [Appendix](../../appendix/code_and_data.html)
+
