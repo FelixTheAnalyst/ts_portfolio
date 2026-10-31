@@ -10,7 +10,7 @@
       <strong>Institution:</strong> <br>University of Cape Town<br>Department of Statistical Sciences
     </td>
     <td align="right">
-      <img src="./uct-logo.png" alt="UCT Logo" width="150">
+      <img src="images/uct-logo.png" alt="UCT Logo" width="150">
     </td>
   </tr>
 </table>
